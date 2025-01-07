@@ -20,6 +20,8 @@ import java.util.List;
 
 public class MainController {
 
+	private List<Book> books = new ArrayList<>();
+
 	@FXML
 	private MenuItem closeButton;
 
@@ -47,12 +49,18 @@ public class MainController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open File");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-		Stage stage = (Stage) ((javafx.scene.control.MenuItem) event.getSource()).getParentPopup().getOwnerWindow();
+
+		Stage stage = (Stage) ((javafx.scene.control.MenuItem) event.getSource())
+				.getParentPopup()
+				.getOwnerWindow();
+
 		File selectedFile = fileChooser.showOpenDialog(stage);
 
 		if (selectedFile != null) {
 			try {
-				List<Book> books = parseXML(selectedFile); // We parse XML
+				List<Book> newBooks = parseXML(selectedFile); // We parse XML
+				books.clear(); // We clear the global list
+				books.addAll(newBooks); // We add new books to the global list
 				books.forEach(System.out::println);
 			} catch (Exception e) {
 				e.printStackTrace();
