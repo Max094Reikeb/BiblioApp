@@ -6,7 +6,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class HelloController {
+public class MainController {
 
 	@FXML
 	private MenuItem closeButton;
