@@ -10,14 +10,15 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="openFileButton" mnemonicParsing="false" onAction="#openFile" text="Open..."/>
-                        <MenuItem fx:id="closeButton" mnemonicParsing="false" onAction="#closeApp" text="Quit"/>
+                        <MenuItem fx:id="openFileButton" mnemonicParsing="false" onAction="#openFile" text="Ouvrir..."/>
+                        <MenuItem fx:id="closeButton" mnemonicParsing="false" onAction="#closeApp" text="Quitter"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Sauvegarder"/>
-                        <MenuItem mnemonicParsing="false" text="Sauvegarder sous..."/>
+                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveFile" text="Sauvegarder"/>
+                        <MenuItem fx:id="saveAsButton" mnemonicParsing="false" onAction="#saveAsFile"
+                                  text="Sauvegarder sous..."/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="About">
