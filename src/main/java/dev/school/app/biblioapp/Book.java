@@ -10,9 +10,10 @@ package dev.school.app.biblioapp;
  * @param publicationYear Année de sortie du livre.
  * @param column          Colonne où se trouve le livre physiquement dans la bibliothèque.
  * @param row             Rangée où se trouve le livre physiquement dans la bibliothèque.
+ * @param borrowed        Est-ce que le livre a été emprunté ou non.
  */
 public record Book(String title, String authorFirstName, String authorLastName, String description, int publicationYear,
-				   int column, int row) {
+				   int column, int row, boolean borrowed) {
 
 	/**
 	 * Fonction permettant d'obtenir les informations d'un livre à partir de celui-ci.
@@ -29,6 +30,7 @@ public record Book(String title, String authorFirstName, String authorLastName, 
 				", publicationYear=" + publicationYear +
 				", column=" + column +
 				", row=" + row +
+				", borrowed=" + borrowed +
 				'}';
 	}
 }

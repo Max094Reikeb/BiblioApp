@@ -11,6 +11,7 @@
   <parution>2000</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <emprunte>false</emprunte>
 </livre>
 <livre>
   <titre>HarryPotter</titre>
@@ -22,6 +23,7 @@
   <parution>1996</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <emprunte>false</emprunte>
 </livre>
 <livre>
   <titre>Eragon</titre>
@@ -33,5 +35,6 @@
   <parution>2001</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <emprunte>false</emprunte>
 </livre>
 </bibliotheque>
