@@ -14,13 +14,23 @@ import javafx.stage.StageStyle;
 
 public class AboutWindow {
 
+	/**
+	 * VERSION est la version actuelle de l'application.
+	 * La stocker dans un string fixe, privé et final au début de la classe est plus sûr et plus facile pour de futurs changements.
+	 */
+	private final static String VERSION = "1.0";
+
+	/**
+	 * Fonction permettant d'afficher la fenêtre "À propos".
+	 * Permet à l'utilisateur de voir le nom de l'application, la version en cours, et les photos des auteurs.
+	 */
 	public static void showAboutWindow() {
 		Stage aboutStage = new Stage();
 		aboutStage.initModality(Modality.APPLICATION_MODAL);
 		aboutStage.initStyle(StageStyle.UTILITY);
 		aboutStage.setTitle("À propos de BiblioApp");
 
-		GridPane gridPane = new GridPane(); // Layout
+		GridPane gridPane = new GridPane(); // Layout (en grille)
 		gridPane.setHgap(20);
 		gridPane.setVgap(20);
 		gridPane.setPadding(new Insets(20));
@@ -39,7 +49,7 @@ public class AboutWindow {
 		titleBox.setSpacing(10);
 		titleBox.getChildren().addAll(
 				new Label("À propos de BiblioApp..."),
-				new Label("Version 1.0"),
+				new Label("Version " + VERSION),
 				new Label("Auteurs:")
 		);
 
