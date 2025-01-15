@@ -137,8 +137,9 @@ public class MainController {
 				int publicationYear = Integer.parseInt(element.getElementsByTagName("parution").item(0).getTextContent());
 				int column = Integer.parseInt(element.getElementsByTagName("colonne").item(0).getTextContent());
 				int row = Integer.parseInt(element.getElementsByTagName("rangee").item(0).getTextContent());
+				boolean borrowed = Boolean.parseBoolean(element.getElementsByTagName("emprunte").item(0).getTextContent());
 
-				books.add(new Book(title, authorFirstName, authorLastName, description, publicationYear, column, row));
+				books.add(new Book(title, authorFirstName, authorLastName, description, publicationYear, column, row, borrowed));
 			}
 		}
 		return books;
@@ -187,6 +188,10 @@ public class MainController {
 				Element rowElement = document.createElement("rangee");
 				rowElement.appendChild(document.createTextNode(String.valueOf(book.row())));
 				bookElement.appendChild(rowElement);
+
+				Element borrowedElement = document.createElement("emprunte");
+				borrowedElement.appendChild(document.createTextNode(String.valueOf(book.borrowed())));
+				bookElement.appendChild(borrowedElement);
 
 				root.appendChild(bookElement);
 			}
