@@ -58,7 +58,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dev.school.app.biblioapp/dev.school.app.biblioapp.Main</mainClass>
+                            <mainClass>dev.school.app.biblioapp.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -69,14 +69,17 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <goals>
                             <goal>run</goal>
                             <goal>jlink</goal>
                         </goals>
                         <configuration>
-                            <mainClass>dev.school.app.biblioapp/dev.school.app.biblioapp.Main</mainClass>
+                            <mainClass>dev.school.app.biblioapp.Main</mainClass>
+                            <jvmArgs>
+                                <jvmArg>-Dapple.awt.application.name=BiblioApp</jvmArg>
+                                <jvmArg>-Dapple.laf.useScreenMenuBar=true</jvmArg>
+                            </jvmArgs>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

@@ -3,15 +3,11 @@ package dev.school.app.biblioapp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -54,7 +50,7 @@ public class Main extends Application {
 
 		Menu aboutMenu = new Menu("À propos");
 		MenuItem aboutItem = new MenuItem("À propos de BiblioApp");
-		aboutItem.setOnAction(e -> showAboutWindow());
+		aboutItem.setOnAction(e -> AboutWindow.showAboutWindow());
 		aboutMenu.getItems().add(aboutItem);
 
 		menuBar.getMenus().addAll(fileMenu, editMenu, aboutMenu);
@@ -64,24 +60,5 @@ public class Main extends Application {
 		stage.setTitle("BiblioApp");
 		stage.setScene(scene);
 		stage.show();
-	}
-
-	private void showAboutWindow() {
-		Stage aboutStage = new Stage();
-		aboutStage.initModality(Modality.APPLICATION_MODAL);
-		aboutStage.initStyle(StageStyle.UTILITY);
-		aboutStage.setTitle("À propos de BiblioApp");
-
-		VBox aboutBox = new VBox(10);
-		aboutBox.setStyle("-fx-padding: 10;");
-		aboutBox.getChildren().addAll(
-				new Label("BiblioApp"),
-				new Label("Version: 1.0"),
-				new Label("Auteurs: Maxence, ...")
-		);
-
-		Scene aboutScene = new Scene(aboutBox);
-		aboutStage.setScene(aboutScene);
-		aboutStage.showAndWait();
 	}
 }
