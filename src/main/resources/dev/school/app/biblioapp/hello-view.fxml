@@ -5,7 +5,6 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0"
             prefWidth="1168.0" xmlns="http://javafx.com/javafx/17.0.4" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="dev.school.app.biblioapp.MainController">
-    <top></top>
     <center>
         <TableView prefHeight="741.0" prefWidth="902.0" style="-fx-background-color: grey;"
                    BorderPane.alignment="CENTER">
