@@ -2,9 +2,9 @@ package dev.school.app.biblioapp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -28,28 +28,50 @@ public class MainController {
 	private File currentFile = null;
 
 	@FXML
-	private MenuItem closeButton;
+	private TableView<Book> bookTable;
 
 	@FXML
-	private MenuItem openFileButton;
+	private TableColumn<Book, String> titleColumn;
 
 	@FXML
-	private MenuItem saveButton;
+	private TableColumn<Book, String> authorFirstNameColumn;
 
 	@FXML
-	private MenuItem saveAsButton;
+	private TableColumn<Book, String> authorLastNameColumn;
 
 	@FXML
-	private Font x1;
+	private TableColumn<Book, String> descriptionColumn;
 
 	@FXML
-	private Color x2;
+	private TableColumn<Book, Integer> yearColumn;
 
 	@FXML
-	private Font x3;
+	private TableColumn<Book, Double> columnColumn;
 
 	@FXML
-	private Color x4;
+	private TableColumn<Book, String> rowColumn;
+
+	@FXML
+	private TableColumn<Book, String> imageColumn;
+
+	@FXML
+	private TableColumn<Book, Boolean> borrowedColumn;
+
+	@FXML
+	private TableColumn<Book, Void> actionColumn;
+
+	@FXML
+	public void initialize() {
+		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+		authorFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorFirstName"));
+		authorLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorLastName"));
+		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+		yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationYear"));
+		columnColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
+		rowColumn.setCellValueFactory(new PropertyValueFactory<>("row"));
+		imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
+	}
 
 	@FXML
 	void closeApp(ActionEvent event) {
@@ -77,6 +99,8 @@ public class MainController {
 			books.clear(); // We clear existing books to avoid duplication
 			try {
 				books.addAll(parseXML(selectedFile)); // We load books from the selected file
+				bookTable.getItems().clear(); // We clear books from the bookTable
+				bookTable.getItems().addAll(books); // We update the bookTable with new loaded books
 				books.forEach(System.out::println);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -158,39 +182,39 @@ public class MainController {
 				Element bookElement = document.createElement("livre");
 
 				Element titleElement = document.createElement("titre");
-				titleElement.appendChild(document.createTextNode(book.title()));
+				titleElement.appendChild(document.createTextNode(book.getTitle()));
 				bookElement.appendChild(titleElement);
 
 				Element authorElement = document.createElement("auteur");
 
 				Element lastNameElement = document.createElement("nom");
-				lastNameElement.appendChild(document.createTextNode(book.authorLastName()));
+				lastNameElement.appendChild(document.createTextNode(book.getAuthorLastName()));
 				authorElement.appendChild(lastNameElement);
 
 				Element firstNameElement = document.createElement("prenom");
-				firstNameElement.appendChild(document.createTextNode(book.authorFirstName()));
+				firstNameElement.appendChild(document.createTextNode(book.getAuthorFirstName()));
 				authorElement.appendChild(firstNameElement);
 
 				bookElement.appendChild(authorElement);
 
 				Element descriptionElement = document.createElement("presentation");
-				descriptionElement.appendChild(document.createTextNode(book.description()));
+				descriptionElement.appendChild(document.createTextNode(book.getDescription()));
 				bookElement.appendChild(descriptionElement);
 
 				Element yearElement = document.createElement("parution");
-				yearElement.appendChild(document.createTextNode(String.valueOf(book.publicationYear())));
+				yearElement.appendChild(document.createTextNode(String.valueOf(book.getPublicationYear())));
 				bookElement.appendChild(yearElement);
 
 				Element columnElement = document.createElement("colonne");
-				columnElement.appendChild(document.createTextNode(String.valueOf(book.column())));
+				columnElement.appendChild(document.createTextNode(String.valueOf(book.getColumn())));
 				bookElement.appendChild(columnElement);
 
 				Element rowElement = document.createElement("rangee");
-				rowElement.appendChild(document.createTextNode(String.valueOf(book.row())));
+				rowElement.appendChild(document.createTextNode(String.valueOf(book.getRow())));
 				bookElement.appendChild(rowElement);
 
 				Element borrowedElement = document.createElement("emprunte");
-				borrowedElement.appendChild(document.createTextNode(String.valueOf(book.borrowed())));
+				borrowedElement.appendChild(document.createTextNode(String.valueOf(book.isBorrowed())));
 				bookElement.appendChild(borrowedElement);
 
 				root.appendChild(bookElement);

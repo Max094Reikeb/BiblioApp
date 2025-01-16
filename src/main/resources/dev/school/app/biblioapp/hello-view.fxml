@@ -6,20 +6,21 @@
             prefWidth="1168.0" xmlns="http://javafx.com/javafx/17.0.4" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="dev.school.app.biblioapp.MainController">
     <center>
-        <TableView prefHeight="741.0" prefWidth="902.0" style="-fx-background-color: grey;">
+        <TableView fx:id="bookTable" prefHeight="741.0" prefWidth="902.0" style="-fx-background-color: grey;">
             <columns>
-                <TableColumn fx:id="tabTitle" prefWidth="151.99999696016312" text="Titre"/>
+                <TableColumn fx:id="titleColumn" prefWidth="151.99999696016312" text="Titre"/>
                 <TableColumn prefWidth="147.99998474121094" text="Auteur">
                     <columns>
-                        <TableColumn fx:id="tabName" prefWidth="100.0" text="Nom"/>
-                        <TableColumn fx:id="tabSurName" prefWidth="100.0" text="Prénom"/>
+                        <TableColumn fx:id="authorLastNameColumn" prefWidth="100.0" text="Nom"/>
+                        <TableColumn fx:id="authorFirstNameColumn" prefWidth="100.0" text="Prénom"/>
                     </columns>
                 </TableColumn>
-                <TableColumn fx:id="tabResume" prefWidth="120.0" text="Résumé"/>
-                <TableColumn fx:id="tabReleaseDate" prefWidth="120.0" text="Parution"/>
-                <TableColumn fx:id="tabColonne" prefWidth="120.0" text="Colonne"/>
-                <TableColumn fx:id="tabRange" prefWidth="96.800048828125" text="Rangée"/>
-                <TableColumn fx:id="tabImage" prefWidth="92.00003662109373" text="Image"/>
+                <TableColumn fx:id="descriptionColumn" prefWidth="120.0" text="Résumé"/>
+                <TableColumn fx:id="yearColumn" prefWidth="120.0" text="Parution"/>
+                <TableColumn fx:id="columnColumn" prefWidth="120.0" text="Colonne"/>
+                <TableColumn fx:id="rowColumn" prefWidth="96.800048828125" text="Rangée"/>
+                <TableColumn fx:id="imageColumn" prefWidth="92.00003662109373" text="Image"/>
+                <TableColumn fx:id="borrowedColumn" text="Borrowed"/>
             </columns>
         </TableView>
     </center>
