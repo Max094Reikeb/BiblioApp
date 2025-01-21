@@ -2,6 +2,10 @@ package dev.school.app.biblioapp;
 
 import javafx.beans.property.*;
 
+/**
+ * Classe-type représentant un livre dans la bibliothèque.
+ * Contient des propriétés liantes (bindings) pour mettre à jour la table FXML.
+ */
 public class Book {
 	private final SimpleStringProperty title;
 	private final SimpleStringProperty authorFirstName;
@@ -14,7 +18,7 @@ public class Book {
 
 
 	/**
-	 * Classe type représentant un livre dans la bibliothèque.
+	 * Initialiser d'un livre-type de la bibliothèque.
 	 *
 	 * @param title           Titre du livre.
 	 * @param authorFirstName Prénom de l'auteur du livre.

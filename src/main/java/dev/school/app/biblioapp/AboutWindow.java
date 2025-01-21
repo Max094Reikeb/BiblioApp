@@ -12,6 +12,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Classe de la fenêtre "À propos".
+ * Cette fenêtre permet d'informer l'utilisateur sur la version actuelle, ainsi que les auteurs.
+ */
 public class AboutWindow {
 
 	/**
@@ -64,7 +68,7 @@ public class AboutWindow {
 				imageView.setImage(image);
 			} catch (NullPointerException | IllegalArgumentException e) {
 				System.out.println("Error loading image " + e.getMessage());
-				imageView.setImage(new Image("/photos/placeholder.png")); // Fallback placeholder
+				imageView.setImage(new Image("/dev/school/app/biblioapp/photos/placeholder.png")); // Fallback placeholder
 			}
 
 			imageView.setFitWidth(100);

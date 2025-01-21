@@ -11,8 +11,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Classe principale du programme.
+ * Contient les fonctions les plus importantes et chargeant la fenêtre principale.
+ */
 public class Main extends Application {
 
+	/**
+	 * Fonction principale lancée avec le programme.
+	 *
+	 * @param args Arguments du programme.
+	 */
 	public static void main(String[] args) {
 		String os = System.getProperty("os.name");
 		if (os.contains("Mac") || os.contains("OS X")) {
@@ -22,6 +31,12 @@ public class Main extends Application {
 		launch();
 	}
 
+	/**
+	 * Fonction lancée avec la fenêtre de l'application.
+	 *
+	 * @param stage Fenêtre de l'application.
+	 * @throws IOException Exception retournée en cas de problème.
+	 */
 	@Override
 	public void start(Stage stage) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
