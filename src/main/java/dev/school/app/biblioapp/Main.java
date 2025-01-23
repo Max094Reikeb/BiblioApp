@@ -51,10 +51,10 @@ public class Main extends Application {
 		MenuItem openItem = new MenuItem("Ouvrir...");
 		openItem.setOnAction(controller::openFile);
 		MenuItem exportItem = new MenuItem("Exporter");
-		exportItem.setOnAction((event) -> System.out.print(""));
+		exportItem.setOnAction(controller::exportToPDF);
 		MenuItem closeItem = new MenuItem("Quitter");
 		closeItem.setOnAction(controller::closeApp);
-		fileMenu.getItems().addAll(openItem, closeItem);
+		fileMenu.getItems().addAll(openItem, exportItem, closeItem);
 
 		Menu editMenu = new Menu("Édition");
 		MenuItem saveItem = new MenuItem("Sauvegarder");
@@ -72,7 +72,6 @@ public class Main extends Application {
 		root.setTop(menuBar);
 
 		Scene scene = new Scene(root, 1168, 602);
-		stage.setTitle("BiblioApp");
 		stage.setScene(scene);
 		stage.show();
 	}

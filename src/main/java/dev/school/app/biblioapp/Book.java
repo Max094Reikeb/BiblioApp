@@ -14,6 +14,7 @@ public class Book {
 	private final SimpleIntegerProperty publicationYear;
 	private final SimpleIntegerProperty column;
 	private final SimpleIntegerProperty row;
+	private final SimpleStringProperty pathImage;
 	private final SimpleBooleanProperty borrowed;
 
 
@@ -30,7 +31,7 @@ public class Book {
 	 * @param borrowed        Est-ce que le livre a été emprunté ou non.
 	 */
 	public Book(String title, String authorFirstName, String authorLastName, String description, int publicationYear,
-				int column, int row, boolean borrowed) {
+				int column, int row, String pathImage, boolean borrowed) {
 		this.title = new SimpleStringProperty(title);
 		this.authorFirstName = new SimpleStringProperty(authorFirstName);
 		this.authorLastName = new SimpleStringProperty(authorLastName);
@@ -38,6 +39,7 @@ public class Book {
 		this.publicationYear = new SimpleIntegerProperty(publicationYear);
 		this.column = new SimpleIntegerProperty(column);
 		this.row = new SimpleIntegerProperty(row);
+		this.pathImage = new SimpleStringProperty(pathImage);
 		this.borrowed = new SimpleBooleanProperty(borrowed);
 	}
 
@@ -102,6 +104,15 @@ public class Book {
 	 */
 	public int getRow() {
 		return row.get();
+	}
+
+	/**
+	 * Getter public de la couverture du livre.
+	 *
+	 * @return L'URL de la couverture du livre.
+	 */
+	public String getPathImage() {
+		return pathImage.get();
 	}
 
 	/**
@@ -179,6 +190,15 @@ public class Book {
 	/**
 	 * Getter bindé pour JavaFX
 	 *
+	 * @return URL de la couverture du livre.
+	 */
+	public StringProperty pathImageProperty() {
+		return pathImage;
+	}
+
+	/**
+	 * Getter bindé pour JavaFX
+	 *
 	 * @return Si le livre a été emprunté ou non.
 	 */
 	public BooleanProperty borrowedProperty() {
@@ -200,6 +220,7 @@ public class Book {
 				", publicationYear=" + getPublicationYear() +
 				", column=" + getColumn() +
 				", row=" + getRow() +
+				", pathImage=" + getPathImage() +
 				", borrowed=" + isBorrowed() +
 				'}';
 	}
