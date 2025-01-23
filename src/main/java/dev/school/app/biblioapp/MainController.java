@@ -2,11 +2,19 @@ package dev.school.app.biblioapp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +78,30 @@ public class MainController {
 		yearColumn.setCellValueFactory(new PropertyValueFactory<>("publicationYear"));
 		columnColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
 		rowColumn.setCellValueFactory(new PropertyValueFactory<>("row"));
-		imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+		imageColumn.setCellValueFactory(new PropertyValueFactory<>("pathImage"));
 		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
+
+		imageColumn.setCellFactory(column -> new TableCell<>() {
+			private final ImageView imageView = new ImageView();
+
+			@Override
+			protected void updateItem(String pathImage, boolean empty) {
+				super.updateItem(pathImage, empty);
+				if (empty || pathImage == null || pathImage.isBlank()) {
+					setGraphic(null);
+				} else {
+					try {
+						Image image = new Image(pathImage, true); // Asynchronous loading
+						imageView.setImage(image);
+						imageView.setFitWidth(100); // Resize as needed
+						imageView.setPreserveRatio(true);
+						setGraphic(imageView);
+					} catch (Exception e) {
+						setGraphic(null);
+					}
+				}
+			}
+		});
 	}
 
 	@FXML
@@ -137,6 +168,91 @@ public class MainController {
 		}
 	}
 
+	@FXML
+	void exportToPDF(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+		// Get the current stage
+		Stage stage = (Stage) ((javafx.scene.control.MenuItem) event.getSource())
+				.getParentPopup()
+				.getOwnerWindow();
+
+		File file = fileChooser.showSaveDialog(stage);
+
+		if (file != null) {
+			try (PDDocument document = new PDDocument()) {
+				// TODO: Title page
+				PDPage titlePage = new PDPage(PDRectangle.A4);
+				document.addPage(titlePage);
+				try (var contentStream = new PDPageContentStream(document, titlePage)) {
+					contentStream.beginText();
+					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 24);
+					contentStream.newLineAtOffset(100, 750);
+					contentStream.showText("Library Report");
+					contentStream.endText();
+				}
+
+				// TODO: Table of Contents
+				PDPage tocPage = new PDPage(PDRectangle.A4);
+				document.addPage(tocPage);
+				try (var contentStream = new PDPageContentStream(document, tocPage)) {
+					contentStream.beginText();
+					contentStream.setFont(PDType1Font.HELVETICA, 16);
+					contentStream.newLineAtOffset(100, 700);
+					contentStream.showText("Table of Contents");
+
+					int yOffset = 650;
+					contentStream.setFont(PDType1Font.HELVETICA, 12);
+					contentStream.newLineAtOffset(0, 0);
+					contentStream.newLineAtOffset(0, yOffset);
+					contentStream.showText("1. Available Books ..................................... Page 3");
+					contentStream.newLineAtOffset(0, yOffset - 30);
+					contentStream.showText("2. Borrowed Books ..................................... Page 4");
+					contentStream.endText();
+				}
+
+				// TODO: Available Books
+				PDPage availablePage = new PDPage(PDRectangle.A4);
+				document.addPage(availablePage);
+				try (var contentStream = new PDPageContentStream(document, availablePage)) {
+					contentStream.beginText();
+					contentStream.setFont(PDType1Font.HELVETICA, 14);
+					contentStream.newLineAtOffset(100, 750);
+					contentStream.showText("Available Books");
+					int yOffset = 700;
+					for (Book book : books.stream().filter(b -> !b.isBorrowed()).toList()) {
+						contentStream.newLineAtOffset(0, yOffset);
+						contentStream.showText(book.toString());
+						yOffset -= 15;
+					}
+					contentStream.endText();
+				}
+
+				// TODO: Borrowed Books
+				PDPage borrowedPage = new PDPage(PDRectangle.A4);
+				document.addPage(borrowedPage);
+				try (var contentStream = new PDPageContentStream(document, borrowedPage)) {
+					contentStream.beginText();
+					contentStream.setFont(PDType1Font.HELVETICA, 14);
+					contentStream.newLineAtOffset(100, 750);
+					contentStream.showText("Borrowed Books");
+					int yOffset = 700;
+					for (Book book : books.stream().filter(Book::isBorrowed).toList()) {
+						contentStream.newLineAtOffset(0, yOffset);
+						contentStream.showText(book.toString());
+						yOffset -= 15;
+					}
+					contentStream.endText();
+				}
+
+				document.save(file); // We save the PDF file
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private List<Book> parseXML(File file) throws Exception {
 		List<Book> books = new ArrayList<>();
 
@@ -161,9 +277,10 @@ public class MainController {
 				int publicationYear = Integer.parseInt(element.getElementsByTagName("parution").item(0).getTextContent());
 				int column = Integer.parseInt(element.getElementsByTagName("colonne").item(0).getTextContent());
 				int row = Integer.parseInt(element.getElementsByTagName("rangee").item(0).getTextContent());
+				String pathImage = element.getElementsByTagName("image").item(0).getTextContent();
 				boolean borrowed = Boolean.parseBoolean(element.getElementsByTagName("emprunte").item(0).getTextContent());
 
-				books.add(new Book(title, authorFirstName, authorLastName, description, publicationYear, column, row, borrowed));
+				books.add(new Book(title, authorFirstName, authorLastName, description, publicationYear, column, row, pathImage, borrowed));
 			}
 		}
 		return books;
@@ -212,6 +329,10 @@ public class MainController {
 				Element rowElement = document.createElement("rangee");
 				rowElement.appendChild(document.createTextNode(String.valueOf(book.getRow())));
 				bookElement.appendChild(rowElement);
+
+				Element pathImageElement = document.createElement("image");
+				pathImageElement.appendChild(document.createTextNode(book.getPathImage()));
+				bookElement.appendChild(pathImageElement);
 
 				Element borrowedElement = document.createElement("emprunte");
 				borrowedElement.appendChild(document.createTextNode(String.valueOf(book.isBorrowed())));

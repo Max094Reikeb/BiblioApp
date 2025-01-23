@@ -11,6 +11,7 @@
   <parution>2000</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
   <emprunte>false</emprunte>
 </livre>
 <livre>
@@ -23,6 +24,7 @@
   <parution>1996</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
   <emprunte>false</emprunte>
 </livre>
 <livre>
@@ -35,6 +37,7 @@
   <parution>2001</parution>
   <colonne>5</colonne>
   <rangee>2</rangee>
+  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
   <emprunte>false</emprunte>
 </livre>
 </bibliotheque>

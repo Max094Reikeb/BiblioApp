@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.school.app</groupId>
-    <artifactId>BiblioApp</artifactId>
+    <artifactId>biblioapp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>BiblioApp</name>
 
@@ -38,9 +38,20 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.27</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,11 +86,7 @@
                             <goal>jlink</goal>
                         </goals>
                         <configuration>
-                            <mainClass>dev.school.app.biblioapp.Main</mainClass>
-                            <jvmArgs>
-                                <jvmArg>-Dapple.awt.application.name=BiblioApp</jvmArg>
-                                <jvmArg>-Dapple.laf.useScreenMenuBar=true</jvmArg>
-                            </jvmArgs>
+                            <mainClass>dev.school.app.biblioapp/dev.school.app.biblioapp.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
