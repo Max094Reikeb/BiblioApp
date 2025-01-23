@@ -2,11 +2,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0"
+<BorderPane maxHeight="-Infinity"   maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" stylesheets="Style.css"
             prefWidth="1168.0" xmlns="http://javafx.com/javafx/17.0.4" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="dev.school.app.biblioapp.MainController">
     <center>
-        <TableView fx:id="bookTable" prefHeight="741.0" prefWidth="902.0" style="-fx-background-color: grey;">
+        <TableView styleClass="custum-background" fx:id="bookTable" prefHeight="741.0"  prefWidth="902.0" style="-fx-background-color: silver;">
             <columns>
                 <TableColumn fx:id="titleColumn" prefWidth="151.99999696016312" text="Titre"/>
                 <TableColumn prefWidth="147.99998474121094" text="Auteur">
@@ -25,7 +25,7 @@
         </TableView>
     </center>
     <right>
-        <VBox prefHeight="577.0" prefWidth="265.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+        <VBox prefHeight="577.0" prefWidth="265.0" alignment="CENTER" style="-fx-background-color: white;-fx-padding: 0 0 0 10;" BorderPane.alignment="CENTER">
             <children>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>

@@ -72,6 +72,7 @@ public class Main extends Application {
 		root.setTop(menuBar);
 
 		Scene scene = new Scene(root, 1168, 602);
+		scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
 		stage.setTitle("BiblioApp");
 		stage.setScene(scene);
 		stage.show();

@@ -1,0 +1,78 @@
+
+/* Arrière-plan avec une image et une couleur de secours */
+.root {
+    -fx-background-color: red; /* Couleur de fond par défaut */
+    -fx-background-image: url("background.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover; /* Ou "contain" si tu veux que l'image soit entièrement visible */
+    -fx-background-position: center center; /* Centre l'image */
+}
+/* Style général du bouton */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #2E7D32);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: none;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+}
+
+/* Effet au survol de la souris */
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #66BB6A, #388E3C);
+    -fx-border-color: #4CAF50;
+}
+
+/* Effet lors du clic */
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #388E3C, #1B5E20);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+    -fx-translate-y: 2; /* Petit déplacement pour l'effet "pressé" */
+}
+
+/* Style général pour les TextFields */
+.text-field, .password-field {
+    -fx-background-color: #F4F4F4; /* Couleur de fond */
+    -fx-border-color: #CCCCCC; /* Bordure initiale */
+    -fx-border-radius: 10; /* Coins arrondis */
+    -fx-background-radius: 10;
+    -fx-padding: 3; /* Marges intérieures */
+    -fx-font-size: 14px;
+    -fx-text-fill: silver; /* Couleur du texte */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2); /* Ombre légère */
+    -fx-transition: 0.3s;
+}
+
+/* Effet au survol */
+.text-field:hover, .password-field:hover {
+    -fx-border-color: #4CAF50; /* Bordure passe au vert */
+}
+
+/* Effet lorsque le champ est sélectionné (focus) */
+.text-field:focused, .password-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #4CAF50; /* Bordure verte */
+    -fx-border-width: 2; /* Bordure légèrement plus épaisse */
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.3), 10, 0, 0, 2); /* Ombre verte */
+}
+
+/* Texte d'indication (prompt text) */
+.text-field:focused .text,
+.password-field:focused .text,
+.text-field .text,
+.password-field .text {
+    -fx-fill: #AAAAAA; /* Couleur du texte indicatif */
+    -fx-font-style: italic;
+}
+
+/* Texte indicatif lorsqu'on tape dedans */
+.text-field:focused .text,
+.password-field:focused .text {
+    -fx-fill: transparent; /* Masque le texte indicatif */
+}
