@@ -12,23 +12,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * Classe de la fenêtre "À propos".
- * Cette fenêtre permet d'informer l'utilisateur sur la version actuelle, ainsi que les auteurs.
- */
 public class AboutWindow {
 
 	/**
-	 * VERSION est la version actuelle de l'application.
-	 * La stocker dans un string fixe, privé et final au début de la classe est plus sûr et plus facile pour de futurs changements.
-	 */
-	private final static String VERSION = "1.0";
-
-	/**
-	 * Fonction permettant d'afficher la fenêtre "À propos".
+	 * Classe type permettant d'afficher la fenêtre "À propos".
 	 * Permet à l'utilisateur de voir le nom de l'application, la version en cours, et les photos des auteurs.
 	 */
-	public static void showAboutWindow() {
+	public AboutWindow() {
 		Stage aboutStage = new Stage();
 		aboutStage.initModality(Modality.APPLICATION_MODAL);
 		aboutStage.initStyle(StageStyle.UTILITY);
@@ -53,7 +43,7 @@ public class AboutWindow {
 		titleBox.setSpacing(10);
 		titleBox.getChildren().addAll(
 				new Label("À propos de BiblioApp..."),
-				new Label("Version " + VERSION),
+				new Label("Version " + Main.VERSION),
 				new Label("Auteurs:")
 		);
 

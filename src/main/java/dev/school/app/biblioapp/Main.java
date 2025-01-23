@@ -18,6 +18,12 @@ import java.io.IOException;
 public class Main extends Application {
 
 	/**
+	 * VERSION est la version actuelle de l'application.
+	 * La stocker dans un string fixe, privé et final au début de la classe est plus sûr et plus facile pour de futurs changements.
+	 */
+	public final static String VERSION = "1.0";
+
+	/**
 	 * Fonction principale lancée avec le programme.
 	 *
 	 * @param args Arguments du programme.
@@ -65,18 +71,14 @@ public class Main extends Application {
 
 		Menu aboutMenu = new Menu("À propos");
 		MenuItem aboutItem = new MenuItem("À propos de BiblioApp");
-		aboutItem.setOnAction(e -> AboutWindow.showAboutWindow());
+		aboutItem.setOnAction(e -> new AboutWindow());
 		aboutMenu.getItems().add(aboutItem);
 
 		menuBar.getMenus().addAll(fileMenu, editMenu, aboutMenu);
 		root.setTop(menuBar);
 
 		Scene scene = new Scene(root, 1168, 602);
-<<<<<<< HEAD
 		scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
-		stage.setTitle("BiblioApp");
-=======
->>>>>>> 1c016865f63530cf7f1a6c819123f49fe86b1d41
 		stage.setScene(scene);
 		stage.show();
 	}
