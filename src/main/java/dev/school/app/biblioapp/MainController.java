@@ -2,6 +2,7 @@ package dev.school.app.biblioapp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -170,6 +171,15 @@ public class MainController {
 
 	@FXML
 	void exportToPDF(ActionEvent event) {
+		if (books.isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Erreur lors de l'export");
+			alert.setHeaderText("Aucun livre chargé !");
+			alert.setContentText("Vous ne pouvez pas exporter un fichier PDF car il n'y a pas de livre chargé dans la bibliothèque.");
+			alert.showAndWait();
+			return;
+		}
+
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
 
@@ -196,52 +206,57 @@ public class MainController {
 				// TODO: Table of Contents
 				PDPage tocPage = new PDPage(PDRectangle.A4);
 				document.addPage(tocPage);
-				try (var contentStream = new PDPageContentStream(document, tocPage)) {
+				try (PDPageContentStream contentStream = new PDPageContentStream(document, tocPage)) {
 					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA, 16);
-					contentStream.newLineAtOffset(100, 700);
+					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 20);
+					contentStream.newLineAtOffset(50, 750);
 					contentStream.showText("Table of Contents");
+					contentStream.setFont(PDType1Font.HELVETICA, 14);
 
-					int yOffset = 650;
-					contentStream.setFont(PDType1Font.HELVETICA, 12);
-					contentStream.newLineAtOffset(0, 0);
-					contentStream.newLineAtOffset(0, yOffset);
-					contentStream.showText("1. Available Books ..................................... Page 3");
-					contentStream.newLineAtOffset(0, yOffset - 30);
-					contentStream.showText("2. Borrowed Books ..................................... Page 4");
+					int yOffset = 700;
+					int pageIndex = 2; // Start after TOC
+					for (Book book : books) {
+						if (yOffset < 50) {
+							contentStream.endText();
+							yOffset = 750;
+							contentStream.beginText();
+							contentStream.newLineAtOffset(50, yOffset);
+						}
+						contentStream.newLineAtOffset(0, -20);
+						yOffset -= 20;
+						contentStream.showText(book.getTitle() + " (Page " + pageIndex + ")");
+						pageIndex++;
+					}
 					contentStream.endText();
 				}
 
 				// TODO: Available Books
-				PDPage availablePage = new PDPage(PDRectangle.A4);
-				document.addPage(availablePage);
-				try (var contentStream = new PDPageContentStream(document, availablePage)) {
-					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA, 14);
-					contentStream.newLineAtOffset(100, 750);
-					contentStream.showText("Available Books");
-					int yOffset = 700;
-					for (Book book : books.stream().filter(b -> !b.isBorrowed()).toList()) {
-						contentStream.newLineAtOffset(0, yOffset);
-						contentStream.showText(book.toString());
-						yOffset -= 15;
-					}
-					contentStream.endText();
+				for (Book book : books) {
+					new BookPage(document, book);
 				}
 
 				// TODO: Borrowed Books
 				PDPage borrowedPage = new PDPage(PDRectangle.A4);
 				document.addPage(borrowedPage);
-				try (var contentStream = new PDPageContentStream(document, borrowedPage)) {
+				try (PDPageContentStream contentStream = new PDPageContentStream(document, borrowedPage)) {
 					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA, 14);
-					contentStream.newLineAtOffset(100, 750);
+					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+					contentStream.newLineAtOffset(50, 750);
 					contentStream.showText("Borrowed Books");
+
+					contentStream.setFont(PDType1Font.HELVETICA, 12);
 					int yOffset = 700;
+					contentStream.newLineAtOffset(0, -20);
 					for (Book book : books.stream().filter(Book::isBorrowed).toList()) {
-						contentStream.newLineAtOffset(0, yOffset);
-						contentStream.showText(book.toString());
+						if (yOffset < 50) {
+							contentStream.endText();
+							yOffset = 750;
+							contentStream.beginText();
+							contentStream.newLineAtOffset(50, yOffset);
+						}
+						contentStream.newLineAtOffset(0, -15);
 						yOffset -= 15;
+						contentStream.showText(book.getTitle() + " | " + book.getAuthorFirstName() + " " + book.getAuthorLastName() + " | " + book.getDescription() + " | " + book.getPublicationYear());
 					}
 					contentStream.endText();
 				}
