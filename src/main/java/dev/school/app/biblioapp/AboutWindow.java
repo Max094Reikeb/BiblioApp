@@ -12,7 +12,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class AboutWindow {
+
+	private static final Logger LOGGER = Main.getLogger();
 
 	/**
 	 * Classe type permettant d'afficher la fenêtre "À propos".
@@ -20,9 +26,10 @@ public class AboutWindow {
 	 */
 	public AboutWindow() {
 		Stage aboutStage = new Stage();
+		ResourceBundle bundle = Main.getBundle();
 		aboutStage.initModality(Modality.APPLICATION_MODAL);
 		aboutStage.initStyle(StageStyle.UTILITY);
-		aboutStage.setTitle("À propos de BiblioApp");
+		aboutStage.setTitle(bundle.getString("menu.aboutBiblioApp"));
 
 		GridPane gridPane = new GridPane(); // Layout (en grille)
 		gridPane.setHgap(20);
@@ -42,9 +49,9 @@ public class AboutWindow {
 		titleBox.setAlignment(Pos.CENTER);
 		titleBox.setSpacing(10);
 		titleBox.getChildren().addAll(
-				new Label("À propos de BiblioApp..."),
-				new Label("Version " + Main.VERSION),
-				new Label("Auteurs:")
+				new Label(bundle.getString("menu.aboutBiblioApp") + "..."),
+				new Label(bundle.getString("version") + " " + Main.getVersion()),
+				new Label(bundle.getString("authors") + ":")
 		);
 
 		for (int i = 0; i < authors.length; i++) {
@@ -56,8 +63,9 @@ public class AboutWindow {
 			try {
 				Image image = new Image(AboutWindow.class.getResource(photoPaths[i]).toExternalForm());
 				imageView.setImage(image);
+				LOGGER.info("Loaded image for author: " + authors[i]);
 			} catch (NullPointerException | IllegalArgumentException e) {
-				System.out.println("Error loading image " + e.getMessage());
+				LOGGER.log(Level.SEVERE, "Error loading image: " + e.getMessage(), e);
 				imageView.setImage(new Image("/dev/school/app/biblioapp/photos/placeholder.png")); // Fallback placeholder
 			}
 
