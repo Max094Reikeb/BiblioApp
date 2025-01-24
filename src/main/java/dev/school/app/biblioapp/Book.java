@@ -19,7 +19,7 @@ public class Book {
 
 
 	/**
-	 * Initialiser d'un livre-type de la bibliothèque.
+	 * Initialisation d'un livre-type de la bibliothèque.
 	 *
 	 * @param title           Titre du livre.
 	 * @param authorFirstName Prénom de l'auteur du livre.

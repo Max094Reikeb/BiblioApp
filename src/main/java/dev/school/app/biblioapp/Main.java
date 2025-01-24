@@ -9,6 +9,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -42,7 +43,12 @@ public class Main extends Application {
 	 */
 	static {
 		try {
-			FileHandler fileHandler = new FileHandler("biblio.log", true);
+			File logDir = new File("logs");
+			if (!logDir.exists())
+				logDir.mkdirs();
+
+			String fileName = "log/biblio-" + System.currentTimeMillis() + ".log"; // Nom de fichier de log
+			FileHandler fileHandler = new FileHandler(fileName, true);
 			fileHandler.setLevel(Level.ALL);
 			fileHandler.setFormatter(new java.util.logging.SimpleFormatter());
 
@@ -71,7 +77,7 @@ public class Main extends Application {
 			System.setProperty("apple.awt.application.name", "BiblioApp");
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		loadLanguage("fr");
+		loadLanguage("fr"); // Langue de l'app par défaut (fr = français)
 		launch();
 	}
 
