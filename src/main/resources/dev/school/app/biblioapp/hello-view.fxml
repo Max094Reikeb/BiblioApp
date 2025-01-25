@@ -8,19 +8,19 @@
     <center>
         <TableView styleClass="custum-background" fx:id="bookTable" prefHeight="741.0"  prefWidth="902.0" style="-fx-background-color: silver;">
             <columns>
-                <TableColumn fx:id="titleColumn" prefWidth="151.99999696016312" text="Titre"/>
-                <TableColumn prefWidth="147.99998474121094" text="Auteur">
+                <TableColumn fx:id="titleColumn" prefWidth="151.99999696016312" text="%bookTitle"/>
+                <TableColumn prefWidth="147.99998474121094" text="%bookAuthor">
                     <columns>
-                        <TableColumn fx:id="authorLastNameColumn" prefWidth="100.0" text="Nom"/>
-                        <TableColumn fx:id="authorFirstNameColumn" prefWidth="100.0" text="Prénom"/>
+                        <TableColumn fx:id="authorLastNameColumn" prefWidth="100.0" text="%bookAuthor.lastName"/>
+                        <TableColumn fx:id="authorFirstNameColumn" prefWidth="100.0" text="%bookAuthor.firstName"/>
                     </columns>
                 </TableColumn>
-                <TableColumn fx:id="descriptionColumn" prefWidth="120.0" text="Résumé"/>
-                <TableColumn fx:id="yearColumn" prefWidth="120.0" text="Parution"/>
-                <TableColumn fx:id="columnColumn" prefWidth="120.0" text="Colonne"/>
-                <TableColumn fx:id="rowColumn" prefWidth="96.800048828125" text="Rangée"/>
-                <TableColumn fx:id="imageColumn" prefWidth="92.00003662109373" text="Image"/>
-                <TableColumn fx:id="borrowedColumn" text="Borrowed"/>
+                <TableColumn fx:id="descriptionColumn" prefWidth="120.0" text="%bookResume"/>
+                <TableColumn fx:id="yearColumn" prefWidth="120.0" text="%bookYear"/>
+                <TableColumn fx:id="columnColumn" prefWidth="120.0" text="%bookColumn"/>
+                <TableColumn fx:id="rowColumn" prefWidth="96.800048828125" text="%bookRow"/>
+                <TableColumn fx:id="imageColumn" prefWidth="92.00003662109373" text="%bookImage"/>
+                <TableColumn fx:id="borrowedColumn" text="%bookBorrowed"/>
             </columns>
         </TableView>
     </center>
@@ -29,55 +29,55 @@
             <children>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Titre :"/>
+                        <Label fx:id="titleLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="title" prefWidth="146.0"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Nom :"/>
+                        <Label fx:id="authorLastNameLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="name"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Prénom :"/>
+                        <Label fx:id="authorFirstNameLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="surName"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Résumé :"/>
+                        <Label fx:id="resumeLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="resume"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Parution :"/>
+                        <Label fx:id="yearLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="releaseDate"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Colonne :"/>
+                        <Label fx:id="columnLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="colonne"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Rangée :"/>
+                        <Label fx:id="rowLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="range"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="36.0" prefWidth="196.0">
                     <children>
-                        <Label prefHeight="18.0" prefWidth="78.0" text="Image :"/>
+                        <Label fx:id="imageLabel" prefHeight="18.0" prefWidth="78.0" />
                         <TextField fx:id="image"/>
                     </children>
                 </HBox>
                 <HBox prefHeight="34.0" prefWidth="266.0">
                     <children>
-                        <Button fx:id="butValid" mnemonicParsing="false" text="Valider"/>
+                        <Button fx:id="butValid" mnemonicParsing="false" text="%button.validate"/>
                     </children>
                 </HBox>
             </children>
