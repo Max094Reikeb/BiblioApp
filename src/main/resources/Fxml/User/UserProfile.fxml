@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.biblio.bibliotheque.Controllers.User.UserProfileController">
+   <Text layoutX="369.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile de l'utilisateur"/>
+   <FontAwesomeIconView glyphName="USER" layoutX="389.0" layoutY="170.0" size="100"/>
+</AnchorPane>

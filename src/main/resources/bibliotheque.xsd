@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="bibliotheque">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="livre" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="titre" type="xs:string"/>
+                            <xs:element name="auteurNom" type="xs:string"/>
+                            <xs:element name="auteurPrenom" type="xs:string"/>
+                            <xs:element name="dateParution" type="xs:date"/>
+                            <xs:element name="colonne" type="xs:int"/>
+                            <xs:element name="rangee" type="xs:int"/>
+                            <xs:element name="resume" type="xs:string"/>
+                            <xs:element name="imagePath" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

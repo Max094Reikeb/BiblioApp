@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" prefHeight="750.0" prefWidth="850.0" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.biblio.bibliotheque.Controllers.User.UserTableViewController">
+    <BorderPane prefHeight="750.0" prefWidth="850.0">
+        <top>
+            <MenuBar>
+                <Menu text="Fichier">
+                    <MenuItem text="Ouvrir" />
+                    <MenuItem text="Quitter" />
+                </Menu>
+                <Menu text="Edition">
+                    <MenuItem text="Sauvegarder" />
+                    <MenuItem text="Sauvegarder sous" />
+                </Menu>
+                <Menu text="About">
+                    <MenuItem text="A propos" />
+                </Menu>
+            </MenuBar>
+        </top>
+        <center>
+            <TableView>
+                <columns>
+                    <TableColumn text="Titre" />
+                    <TableColumn text="Auteur" />
+                    <TableColumn text="Date de Parution" />
+                    <TableColumn text="Colonne" />
+                    <TableColumn text="Rangée" />
+                </columns>
+            </TableView>
+        </center>
+    </BorderPane>
+</AnchorPane>
+
+
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.biblio.bibliotheque.Controllers.User.UserTableViewController">
+    <TableView layoutX="-1.0" prefHeight="750.0" prefWidth="850.0">
+      <columns>
+          <TableColumn prefWidth="75.0" text="Auteur"/>
+          <TableColumn prefWidth="75.0" text="Parution"/>
+          <TableColumn prefWidth="75.0" text="Rangé"/>
+      </columns>
+    </TableView>
+</AnchorPane>-->
