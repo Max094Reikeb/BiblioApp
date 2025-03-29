@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane fx:id="admin_parent" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="dev.school.app.biblioapp.controllers.AdminController">
+    <left>
+        <AnchorPane fx:id="left_container"/>
+    </left>
+
+    <center>
+        <AnchorPane fx:id="center_container"/>
+    </center>
+
+</BorderPane>

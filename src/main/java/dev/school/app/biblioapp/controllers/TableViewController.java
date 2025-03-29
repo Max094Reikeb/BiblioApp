@@ -1,7 +1,12 @@
-package dev.school.app.biblioapp;
+package dev.school.app.biblioapp.controllers;
 
+import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.Book;
+import dev.school.app.biblioapp.views.AboutWindow;
+import dev.school.app.biblioapp.views.BookPage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -26,23 +31,35 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Classe controller qui s'occupe de la liaison FXML au Java.
- */
-public class MainController {
+public class TableViewController implements Initializable {
 
 	private static final Logger LOGGER = Main.getLogger();
 	private final ResourceBundle bundle = Main.getBundle();
 
 	private List<Book> books = new ArrayList<>();
 	private File currentFile = null;
+
+	@FXML
+	private MenuItem openMenuItem;
+	@FXML
+	private MenuItem exportMenuItem;
+	@FXML
+	private MenuItem quitMenuItem;
+
+	@FXML
+	private MenuItem saveMenuItem;
+	@FXML
+	private MenuItem saveAsMenuItem;
+
+	@FXML
+	private MenuItem aboutMenuItem;
 
 	@FXML
 	private TableView<Book> bookTable;
@@ -74,35 +91,18 @@ public class MainController {
 	@FXML
 	private TableColumn<Book, Boolean> borrowedColumn;
 
-	@FXML
-	private Label titleLabel;
-
-	@FXML
-	private Label authorLastNameLabel;
-
-	@FXML
-	private Label authorFirstNameLabel;
-
-	@FXML
-	private Label resumeLabel;
-
-	@FXML
-	private Label yearLabel;
-
-	@FXML
-	private Label columnLabel;
-
-	@FXML
-	private Label rowLabel;
-
-	@FXML
-	private Label imageLabel;
-
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
 	 */
-	@FXML
-	public void initialize() {
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		openMenuItem.setOnAction(this::openFile);
+		exportMenuItem.setOnAction(this::exportToPDF);
+		quitMenuItem.setOnAction(this::closeApp);
+		saveMenuItem.setOnAction(this::saveFile);
+		saveAsMenuItem.setOnAction(this::saveAsFile);
+		aboutMenuItem.setOnAction(e -> new AboutWindow());
+
 		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 		authorFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorFirstName"));
 		authorLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorLastName"));
@@ -134,15 +134,6 @@ public class MainController {
 				}
 			}
 		});
-
-		titleLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookTitle")));
-		authorLastNameLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookAuthor.lastName")));
-		authorFirstNameLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookAuthor.firstName")));
-		resumeLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookResume")));
-		yearLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookYear")));
-		columnLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookColumn")));
-		rowLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookRow")));
-		imageLabel.setText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookImage")));
 	}
 
 	/**
@@ -273,7 +264,7 @@ public class MainController {
 					contentStream.beginText();
 					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 24);
 					contentStream.newLineAtOffset(100, 750);
-					contentStream.showText("Library Report");
+					contentStream.showText(bundle.getString("pdfExport.titlePage.title"));
 					contentStream.endText();
 				}
 
@@ -284,7 +275,7 @@ public class MainController {
 					contentStream.beginText();
 					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 20);
 					contentStream.newLineAtOffset(50, 750);
-					contentStream.showText("Table of Contents");
+					contentStream.showText(bundle.getString("pdfExport.tocPage.title"));
 					contentStream.setFont(PDType1Font.HELVETICA, 14);
 
 					int yOffset = 700;
@@ -315,7 +306,7 @@ public class MainController {
 					contentStream.beginText();
 					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
 					contentStream.newLineAtOffset(50, 750);
-					contentStream.showText("Borrowed Books");
+					contentStream.showText(bundle.getString("pdfExport.borrowedPage.title"));
 
 					contentStream.setFont(PDType1Font.HELVETICA, 12);
 					int yOffset = 700;

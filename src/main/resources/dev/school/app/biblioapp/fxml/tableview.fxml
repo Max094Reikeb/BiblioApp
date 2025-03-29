@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="745.0"
+            prefWidth="1500.0"
+            stylesheets="@../styles/tableview.css"
+            xmlns="http://javafx.com/javafx/17.0.4"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.school.app.biblioapp.controllers.TableViewController">
+    <BorderPane prefHeight="745.0" prefWidth="1500.0">
+        <top>
+            <MenuBar>
+                <Menu text="%menu.file">
+                    <MenuItem fx:id="openMenuItem" text="%menu.open"/>
+                    <MenuItem fx:id="exportMenuItem" text="%menu.export"/>
+                    <MenuItem fx:id="quitMenuItem" text="%menu.quit"/>
+                </Menu>
+                <Menu text="%menu.edit">
+                    <MenuItem fx:id="saveMenuItem" text="%menu.save"/>
+                    <MenuItem fx:id="saveAsMenuItem" text="%menu.saveAs"/>
+                </Menu>
+                <Menu text="%menu.about">
+                    <MenuItem fx:id="aboutMenuItem" text="%menu.aboutBiblioApp"/>
+                </Menu>
+            </MenuBar>
+        </top>
+        <center>
+            <TableView styleClass="custom-background" fx:id="bookTable" style="-fx-background-color: silver;">
+                <columns>
+                    <TableColumn fx:id="titleColumn" prefWidth="240.0" text="%bookTitle"/>
+                    <TableColumn prefWidth="240.0" text="%bookAuthor">
+                        <columns>
+                            <TableColumn fx:id="authorLastNameColumn" prefWidth="120.0" text="%bookAuthor.lastName"/>
+                            <TableColumn fx:id="authorFirstNameColumn" prefWidth="120.0" text="%bookAuthor.firstName"/>
+                        </columns>
+                    </TableColumn>
+                    <TableColumn fx:id="descriptionColumn" prefWidth="460.0" text="%bookResume"/>
+                    <TableColumn fx:id="yearColumn" prefWidth="70.0" text="%bookYear"/>
+                    <TableColumn fx:id="columnColumn" prefWidth="70.0" text="%bookColumn"/>
+                    <TableColumn fx:id="rowColumn" prefWidth="70.0" text="%bookRow"/>
+                    <TableColumn fx:id="imageColumn" prefWidth="255.0" text="%bookImage"/>
+                    <TableColumn fx:id="borrowedColumn" prefWidth="90.0" text="%bookAvailability"/>
+                </columns>
+            </TableView>
+        </center>
+    </BorderPane>
+</AnchorPane>

@@ -1,12 +1,7 @@
 package dev.school.app.biblioapp;
 
+import dev.school.app.biblioapp.models.Model;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -47,7 +42,7 @@ public class Main extends Application {
 			if (!logDir.exists())
 				logDir.mkdirs();
 
-			String fileName = "log/biblio-" + System.currentTimeMillis() + ".log"; // Nom de fichier de log
+			String fileName = "logs/biblio-" + System.currentTimeMillis() + ".log"; // Nom de fichier de log
 			FileHandler fileHandler = new FileHandler(fileName, true);
 			fileHandler.setLevel(Level.ALL);
 			fileHandler.setFormatter(new java.util.logging.SimpleFormatter());
@@ -122,46 +117,9 @@ public class Main extends Application {
 	 * Fonction lancée avec la fenêtre de l'application.
 	 *
 	 * @param stage Fenêtre de l'application.
-	 * @throws IOException Exception retournée en cas de problème.
 	 */
 	@Override
-	public void start(Stage stage) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-		fxmlLoader.setResources(bundle);
-
-		BorderPane root = new BorderPane();
-		root.setCenter(fxmlLoader.load());
-
-		MainController controller = fxmlLoader.getController();
-		MenuBar menuBar = new MenuBar();
-
-		Menu fileMenu = new Menu(bundle.getString("menu.file"));
-		MenuItem openItem = new MenuItem(bundle.getString("menu.open"));
-		openItem.setOnAction(controller::openFile);
-		MenuItem exportItem = new MenuItem(bundle.getString("menu.export"));
-		exportItem.setOnAction(controller::exportToPDF);
-		MenuItem closeItem = new MenuItem(bundle.getString("menu.quit"));
-		closeItem.setOnAction(controller::closeApp);
-		fileMenu.getItems().addAll(openItem, exportItem, closeItem);
-
-		Menu editMenu = new Menu(bundle.getString("menu.edit"));
-		MenuItem saveItem = new MenuItem(bundle.getString("menu.save"));
-		saveItem.setOnAction(controller::saveFile);
-		MenuItem saveAsItem = new MenuItem(bundle.getString("menu.saveAs"));
-		saveAsItem.setOnAction(controller::saveAsFile);
-		editMenu.getItems().addAll(saveItem, saveAsItem);
-
-		Menu aboutMenu = new Menu(bundle.getString("menu.about"));
-		MenuItem aboutItem = new MenuItem(bundle.getString("menu.aboutBiblioApp"));
-		aboutItem.setOnAction(e -> new AboutWindow());
-		aboutMenu.getItems().add(aboutItem);
-
-		menuBar.getMenus().addAll(fileMenu, editMenu, aboutMenu);
-		root.setTop(menuBar);
-
-		Scene scene = new Scene(root, 1168, 602);
-		scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
-		stage.setScene(scene);
-		stage.show();
+	public void start(Stage stage) {
+		Model.getInstance().getViewFactory().showAdminWindow();
 	}
 }
