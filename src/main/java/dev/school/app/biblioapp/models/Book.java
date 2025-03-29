@@ -1,4 +1,4 @@
-package dev.school.app.biblioapp;
+package dev.school.app.biblioapp.models;
 
 import javafx.beans.property.*;
 

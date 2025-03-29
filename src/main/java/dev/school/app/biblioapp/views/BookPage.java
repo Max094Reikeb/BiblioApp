@@ -1,5 +1,7 @@
-package dev.school.app.biblioapp;
+package dev.school.app.biblioapp.views;
 
+import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.Book;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -11,8 +13,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookPage {
+
+	private static final Logger LOGGER = Main.getLogger();
+	private final ResourceBundle bundle = Main.getBundle();
 
 	/**
 	 * Classe type générant une page PDF pour un livre de la bibliothèque.
@@ -30,13 +39,13 @@ public class BookPage {
 			contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
 			contentStream.newLineAtOffset(50, 750);
 
-			contentStream.showText("Title: " + book.getTitle());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookTitle")) + " " + book.getTitle());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText("Author: " + book.getAuthorFirstName() + " " + book.getAuthorLastName());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookAuthor")) + " " + book.getAuthorFirstName() + " " + book.getAuthorLastName());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText("Description: " + book.getDescription());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookResume")) + " " + book.getDescription());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText("Publication Year: " + book.getPublicationYear());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookPubYear")) + " " + book.getPublicationYear());
 			contentStream.newLineAtOffset(0, -20);
 			contentStream.endText();
 
@@ -46,10 +55,10 @@ public class BookPage {
 					if (image != null) {
 						contentStream.drawImage(image, 50, 500, 100, 150);
 					} else {
-						System.out.println("Image for book '" + book.getTitle() + "' could not be loaded.");
+						LOGGER.log(Level.SEVERE, "Image for book " + book.getTitle() + " could not be loaded!");
 					}
 				} catch (IOException e) {
-					System.out.println("Image for book '" + book.getTitle() + "' could not be loaded.");
+					LOGGER.log(Level.SEVERE, "Error while loading image for book " + book.getTitle() + "! " + e.getMessage(), e);
 				}
 			}
 		}
@@ -76,10 +85,10 @@ public class BookPage {
 				byte[] imageBytes = inputStream.readAllBytes();
 				return PDImageXObject.createFromByteArray(document, imageBytes, "image");
 			} else {
-				System.err.println("Unexpected response code: " + connection.getResponseCode() + " for URL: " + imageUrl);
+				LOGGER.log(Level.SEVERE, "Unexpected response code: " + connection.getResponseCode() + "for URL: " + imageUrl);
 			}
 		} catch (IOException e) {
-			System.err.println("Failed to load image from URL: " + imageUrl + " - " + e.getMessage());
+			LOGGER.log(Level.SEVERE, "Failed to load image from URL: " + imageUrl + " - " + e.getMessage(), e);
 		} finally {
 			connection.disconnect();
 		}

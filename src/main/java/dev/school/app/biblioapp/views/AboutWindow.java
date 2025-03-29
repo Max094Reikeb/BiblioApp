@@ -1,5 +1,6 @@
-package dev.school.app.biblioapp;
+package dev.school.app.biblioapp.views;
 
+import dev.school.app.biblioapp.Main;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

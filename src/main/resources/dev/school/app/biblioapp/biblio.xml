@@ -1,43 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- fichier livre.xml -->
 <bibliotheque>
-<livre>
-  <titre>XSD pour les nuls</titre>
-  <auteur>
-    <nom>Dupond</nom>
-    <prenom>Jean</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>2000</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
-  <emprunte>false</emprunte>
-</livre>
-<livre>
-  <titre>HarryPotter</titre>
-  <auteur>
-    <nom>Rowling</nom>
-    <prenom>JK</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>1996</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
-  <emprunte>false</emprunte>
-</livre>
-<livre>
-  <titre>Eragon</titre>
-  <auteur>
-    <nom>Paolini</nom>
-    <prenom>Christopher</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>2001</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-  <image>https://cdn1.booknode.com/book_cover/835/full/harry-potter-tome-1-harry-potter-a-lecole-des-sorciers-835229.jpg</image>
-  <emprunte>false</emprunte>
-</livre>
+    <livre>
+        <titre>Le Seigneur des Anneaux</titre>
+        <auteur>
+            <nom>Tolkien</nom>
+            <prenom>J.R.R.</prenom>
+        </auteur>
+        <presentation>Une épopée fantastique dans un monde imaginaire.</presentation>
+        <parution>1954</parution>
+        <colonne>1</colonne>
+        <rangee>1</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>Les Misérables</titre>
+        <auteur>
+            <nom>Hugo</nom>
+            <prenom>Victor</prenom>
+        </auteur>
+        <presentation>Une fresque historique et sociale de la France du XIXe siècle.</presentation>
+        <parution>1862</parution>
+        <colonne>2</colonne>
+        <rangee>3</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>true</emprunte>
+    </livre>
+    <livre>
+        <titre>1984</titre>
+        <auteur>
+            <nom>Orwell</nom>
+            <prenom>George</prenom>
+        </auteur>
+        <presentation>Une dystopie sur les dangers du totalitarisme.</presentation>
+        <parution>1949</parution>
+        <colonne>3</colonne>
+        <rangee>4</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>Dune</titre>
+        <auteur>
+            <nom>Herbert</nom>
+            <prenom>Frank</prenom>
+        </auteur>
+        <presentation>Un classique de la science-fiction explorant le pouvoir et l'écologie.</presentation>
+        <parution>1965</parution>
+        <colonne>4</colonne>
+        <rangee>2</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>La Peste</titre>
+        <auteur>
+            <nom>Camus</nom>
+            <prenom>Albert</prenom>
+        </auteur>
+        <presentation>Une réflexion sur la condition humaine et la solidarité face à l'adversité.</presentation>
+        <parution>1947</parution>
+        <colonne>6</colonne>
+        <rangee>5</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>true</emprunte>
+    </livre>
+    <livre>
+        <titre>Le Petit Prince</titre>
+        <auteur>
+            <nom>Saint-Exupéry</nom>
+            <prenom>Antoine</prenom>
+        </auteur>
+        <presentation>Un conte poétique et philosophique intemporel.</presentation>
+        <parution>1943</parution>
+        <colonne>7</colonne>
+        <rangee>1</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>La Recherche du Temps Perdu</titre>
+        <auteur>
+            <nom>Proust</nom>
+            <prenom>Marcel</prenom>
+        </auteur>
+        <presentation>Une exploration des souvenirs et de la condition humaine.</presentation>
+        <parution>1913</parution>
+        <colonne>5</colonne>
+        <rangee>3</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>Le Meilleur des Mondes</titre>
+        <auteur>
+            <nom>Huxley</nom>
+            <prenom>Aldous</prenom>
+        </auteur>
+        <presentation>Une dystopie sur les dangers de la manipulation scientifique.</presentation>
+        <parution>1932</parution>
+        <colonne>3</colonne>
+        <rangee>2</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>false</emprunte>
+    </livre>
+    <livre>
+        <titre>Les Fleurs du Mal</titre>
+        <auteur>
+            <nom>Baudelaire</nom>
+            <prenom>Charles</prenom>
+        </auteur>
+        <presentation>Une œuvre poétique emblématique de la modernité.</presentation>
+        <parution>1857</parution>
+        <colonne>2</colonne>
+        <rangee>5</rangee>
+        <image>https://via.placeholder.com/150</image>
+        <emprunte>true</emprunte>
+    </livre>
 </bibliotheque>
