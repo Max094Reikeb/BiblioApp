@@ -1,14 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.4"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dev.school.app.biblioapp.controllers.CreateBookController">
-    <Text layoutX="14.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ajouter un livre ">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Text>
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.school.app.biblioapp.controllers.CreateBookController">
+   <Button layoutX="399.0" layoutY="576.0" mnemonicParsing="false" text="Submit" />
+   <Text layoutX="349.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ajout de livres" textAlignment="CENTER">
+      <font>
+         <Font size="24.0" />
+      </font>
+   </Text>
+   <Label id="Titre " layoutX="185.0" layoutY="125.0" text="Titre ">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <TextField layoutX="534.0" layoutY="126.0" />
+   <TextField layoutX="534.0" layoutY="179.0" />
+   <TextField layoutX="534.0" layoutY="231.0" />
+   <TextField layoutX="534.0" layoutY="269.0" />
+   <TextField layoutX="534.0" layoutY="329.0" />
+   <TextField layoutX="534.0" layoutY="375.0" />
+   <TextField layoutX="534.0" layoutY="420.0" />
+   <Label id="Prénom de l'auteur" layoutX="185.0" layoutY="178.0" text="Prénom de l'auteur">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Nom de l'auteur" layoutX="185.0" layoutY="230.0" text="Nom de l'auteur">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Description" layoutX="185.0" layoutY="268.0" text="Description">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Année de publication" layoutX="184.0" layoutY="328.0" text="Année de publication">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Column" layoutX="187.0" layoutY="374.0" text="Colonnes">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Row" layoutX="187.0" layoutY="419.0" text="Lignes">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label layoutX="241.0" layoutY="475.0" />
+   <CheckBox layoutX="571.0" layoutY="528.0" mnemonicParsing="false" text="Emprunté" />
+   <Label id="État du livre" layoutX="183.0" layoutY="523.0" text="État du livre">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <Label id="Lien Url de l'image" layoutX="183.0" layoutY="479.0" text="Lien Url de l'image">
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <TextField layoutX="535.0" layoutY="480.0" />
 </AnchorPane>
