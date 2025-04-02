@@ -42,6 +42,7 @@
                     <TableColumn fx:id="rowColumn" prefWidth="70.0" text="%bookRow"/>
                     <TableColumn fx:id="imageColumn" prefWidth="255.0" text="%bookImage"/>
                     <TableColumn fx:id="borrowedColumn" prefWidth="90.0" text="%bookAvailability"/>
+                    <TableColumn fx:id="deleteColumn" prefWidth="40" sortable="false"/>
                 </columns>
             </TableView>
         </center>
