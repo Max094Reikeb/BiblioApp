@@ -29,19 +29,19 @@
         <center>
             <TableView styleClass="custom-background" fx:id="bookTable" style="-fx-background-color: silver;">
                 <columns>
-                    <TableColumn fx:id="titleColumn" prefWidth="240.0" text="%bookTitle"/>
-                    <TableColumn prefWidth="240.0" text="%bookAuthor">
+                    <TableColumn fx:id="titleColumn" prefWidth="240.0" text="%book.title"/>
+                    <TableColumn prefWidth="240.0" text="%book.author">
                         <columns>
-                            <TableColumn fx:id="authorLastNameColumn" prefWidth="120.0" text="%bookAuthor.lastName"/>
-                            <TableColumn fx:id="authorFirstNameColumn" prefWidth="120.0" text="%bookAuthor.firstName"/>
+                            <TableColumn fx:id="authorLastNameColumn" prefWidth="120.0" text="%book.author.lastName"/>
+                            <TableColumn fx:id="authorFirstNameColumn" prefWidth="120.0" text="%book.author.firstName"/>
                         </columns>
                     </TableColumn>
-                    <TableColumn fx:id="descriptionColumn" prefWidth="460.0" text="%bookResume"/>
-                    <TableColumn fx:id="yearColumn" prefWidth="70.0" text="%bookYear"/>
-                    <TableColumn fx:id="columnColumn" prefWidth="70.0" text="%bookColumn"/>
-                    <TableColumn fx:id="rowColumn" prefWidth="70.0" text="%bookRow"/>
-                    <TableColumn fx:id="imageColumn" prefWidth="255.0" text="%bookImage"/>
-                    <TableColumn fx:id="borrowedColumn" prefWidth="90.0" text="%bookAvailability"/>
+                    <TableColumn fx:id="descriptionColumn" prefWidth="460.0" text="%book.resume"/>
+                    <TableColumn fx:id="yearColumn" prefWidth="70.0" text="%book.year"/>
+                    <TableColumn fx:id="columnColumn" prefWidth="70.0" text="%book.column"/>
+                    <TableColumn fx:id="rowColumn" prefWidth="70.0" text="%book.row"/>
+                    <TableColumn fx:id="imageColumn" prefWidth="255.0" text="%book.image"/>
+                    <TableColumn fx:id="borrowedColumn" prefWidth="90.0" text="%book.availability"/>
                     <TableColumn fx:id="deleteColumn" prefWidth="40" sortable="false"/>
                 </columns>
             </TableView>

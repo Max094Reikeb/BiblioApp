@@ -68,7 +68,7 @@ public class ViewFactory {
 			stage.setScene(scene);
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.png"))));
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.icns"))));
-			stage.setResizable(false);
+			stage.setResizable(true);
 			stage.setTitle(bundle.getString("app.title"));
 			stage.show();
 		} catch (Exception e) {
