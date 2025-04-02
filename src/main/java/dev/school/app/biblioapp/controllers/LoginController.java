@@ -16,7 +16,6 @@ public class LoginController implements Initializable {
 	public TextField user_account_field;
 	public TextField password_field;
 	public Button login_btn;
-	public Label error_lbl;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -24,7 +23,7 @@ public class LoginController implements Initializable {
 	}
 
 	private void onLogin() {
-		Stage stage = (Stage) error_lbl.getScene().getWindow();
+		Stage stage = (Stage) login_btn.getScene().getWindow();
 		Model.getInstance().getViewFactory().closeStage(stage);
 		Model.getInstance().getViewFactory().showAdminWindow();
 	}

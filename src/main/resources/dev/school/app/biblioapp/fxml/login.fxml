@@ -1,36 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import de.jensd.fx.glyphs.GlyphsStack?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="home_container"
-            stylesheets="@../styles/home.css"
-            xmlns="http://javafx.com/javafx/17.0.4"
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.4"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dev.school.app.biblioapp.controllers.LoginController">
-    <VBox layoutX="5.0" layoutY="14.0" prefHeight="374.0" prefWidth="153.0" styleClass="home_logo_container"
-          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <FontAwesomeIconView glyphName="BOOK" size="50"/>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%sidebar.title">
-            <font>
-                <Font size="11.0"/>
-            </font>
-        </Text>
-        <GlyphsStack
-                accessibleText="&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;"
-                prefHeight="0.0" prefWidth="154.0"/>
-        <GlyphsStack/>
-    </VBox>
-    <VBox layoutX="179.2" layoutY="22.6" prefHeight="355.0" prefWidth="394.0" styleClass="login_form_container"
-          AnchorPane.leftAnchor="179.2" AnchorPane.rightAnchor="27.200000000000045" AnchorPane.topAnchor="22.6">
-        <Label fx:id="user_account_lbl" text="Utilisateur"/>
-        <TextField fx:id="user_account_field" styleClass="input_field"/>
-        <Label text="Mot de passe"/>
-        <TextField fx:id="password_field" styleClass="input_field"/>
-        <Button fx:id="login_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="394.0" text="Connexion"/>
-        <Label fx:id="error_lbl" styleClass="error_lbl"/>
-    </VBox>
-</AnchorPane>
+            fx:controller="dev.school.app.biblioapp.controllers.LoginController"
+            stylesheets="@../styles/home.css"
+            styleClass="home_container">
+    <left>
+        <VBox layoutX="5.0" layoutY="14.0" prefHeight="374.0" prefWidth="153.0" spacing="10"
+              styleClass="home_logo_container">
+            <padding>
+                <Insets top="05" right="05" bottom="05" left="05"/>
+            </padding>
+            <FontAwesomeIconView glyphName="BOOK" glyphSize="50"/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%sidebar.title.maj">
+                <font>
+                    <Font size="11.0"/>
+                </font>
+            </Text>
+        </VBox>
+    </left>
+    <center>
+        <VBox alignment="CENTER" spacing="20" maxWidth="394.0" styleClass="login_form_container">
+            <GridPane hgap="10" vgap="15" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="%login.username" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="user_account_field" promptText="%login.username.prompt"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"
+                           styleClass="input_field"/>
+
+                <Label text="%login.password" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <PasswordField fx:id="password_field" promptText="%login.password.prompt"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               styleClass="input_field"/>
+            </GridPane>
+            <Button fx:id="login_btn" text="%login.button"/>
+        </VBox>
+    </center>
+    <padding>
+        <Insets top="20" bottom="40" left="40" right="40"/>
+    </padding>
+</BorderPane>
