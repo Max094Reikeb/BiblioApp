@@ -37,7 +37,7 @@ public class BookPage {
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 			contentStream.beginText();
-			contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+			contentStream.setFont(PDType1Font.HELVETICA, 14);
 			contentStream.newLineAtOffset(50, 750);
 
 			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookTitle")) + " " + book.getTitle());
