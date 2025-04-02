@@ -2,6 +2,7 @@ package dev.school.app.biblioapp.controllers;
 
 import dev.school.app.biblioapp.Main;
 import dev.school.app.biblioapp.models.Book;
+import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
 import javafx.event.ActionEvent;
@@ -51,7 +52,7 @@ public class TableViewController implements Initializable {
 	private static final Logger LOGGER = Main.getLogger();
 	private final ResourceBundle bundle = Main.getBundle();
 
-	private List<Book> books = new ArrayList<>();
+	private List<Book> books;
 	private File currentFile = null;
 
 	@FXML
@@ -104,6 +105,8 @@ public class TableViewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		books = Model.getInstance().getBooks();
+
 		openMenuItem.setOnAction(this::openFile);
 		exportMenuItem.setOnAction(this::exportToPDF);
 		quitMenuItem.setOnAction(this::closeApp);
