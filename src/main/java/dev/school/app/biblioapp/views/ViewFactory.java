@@ -60,6 +60,12 @@ public class ViewFactory {
 		createStage(loader);
 	}
 
+	public void showLoginPageWindow() {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/login.fxml"));
+		loader.setResources(bundle);
+		createStage(loader);
+	}
+
 	private void createStage(FXMLLoader loader) {
 		Scene scene;
 		try {

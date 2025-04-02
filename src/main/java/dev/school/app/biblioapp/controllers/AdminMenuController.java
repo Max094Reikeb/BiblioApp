@@ -4,6 +4,7 @@ import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.views.AdminMenuOptions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,6 +24,7 @@ public class AdminMenuController implements Initializable {
 	private void addListener() {
 		book_list_btn.setOnAction(event -> onBooks());
 		create_book_btn.setOnAction(event -> onCreateBook());
+		logout_bnt.setOnAction(event -> onLogout());
 	}
 
 	private void onBooks() {
@@ -31,5 +33,11 @@ public class AdminMenuController implements Initializable {
 
 	private void onCreateBook() {
 		Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.CREATE_BOOK);
+	}
+
+	private void onLogout() {
+		Stage stage = (Stage) logout_bnt.getScene().getWindow();
+		Model.getInstance().getViewFactory().closeStage(stage);
+		Model.getInstance().getViewFactory().showLoginPageWindow();
 	}
 }
