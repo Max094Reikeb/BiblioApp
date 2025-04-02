@@ -22,6 +22,7 @@ public class BookPage {
 
 	private static final Logger LOGGER = Main.getLogger();
 	private final ResourceBundle bundle = Main.getBundle();
+	private final PDPage page;
 
 	/**
 	 * Classe type générant une page PDF pour un livre de la bibliothèque.
@@ -31,7 +32,7 @@ public class BookPage {
 	 * @throws IOException Exception générée en cas d'erreur.
 	 */
 	public BookPage(PDDocument document, Book book) throws IOException {
-		PDPage page = new PDPage(PDRectangle.A4);
+		this.page = new PDPage(PDRectangle.A4);
 		document.addPage(page);
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
@@ -93,5 +94,9 @@ public class BookPage {
 			connection.disconnect();
 		}
 		return null;
+	}
+
+	public PDPage getPage() {
+		return this.page;
 	}
 }
