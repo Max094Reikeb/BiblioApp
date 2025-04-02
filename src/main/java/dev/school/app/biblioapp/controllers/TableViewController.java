@@ -1,5 +1,7 @@
 package dev.school.app.biblioapp.controllers;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
 import dev.school.app.biblioapp.models.Book;
 import dev.school.app.biblioapp.models.Model;
@@ -100,6 +102,9 @@ public class TableViewController implements Initializable {
 	@FXML
 	private TableColumn<Book, Boolean> borrowedColumn;
 
+	@FXML
+	private TableColumn<Book, Void> deleteColumn;
+
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
 	 */
@@ -142,6 +147,50 @@ public class TableViewController implements Initializable {
 					} catch (Exception e) {
 						setGraphic(null);
 					}
+				}
+			}
+		});
+
+		deleteColumn.setCellFactory(column -> new TableCell<>() {
+			private final Button deleteButton = new Button();
+
+			{
+				FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+				icon.setGlyphSize(16);
+				icon.getStyleClass().add("delete-icon");
+
+				deleteButton.setGraphic(icon);
+				deleteButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				deleteButton.setOnAction(e -> {
+					Book book = getTableView().getItems().get(getIndex());
+
+					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+					confirm.setTitle(bundle.getString("book.delete.title"));
+					confirm.setHeaderText(bundle.getString("book.delete.header"));
+					confirm.setContentText(MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()));
+
+					ButtonType yes = new ButtonType(bundle.getString("book.delete.yes"), ButtonBar.ButtonData.YES);
+					ButtonType no = new ButtonType(bundle.getString("book.delete.no"), ButtonBar.ButtonData.NO);
+
+					confirm.getButtonTypes().setAll(yes, no);
+
+					confirm.showAndWait().ifPresent(response -> {
+						if (response == yes) {
+							bookTable.getItems().remove(book);
+							books.remove(book);
+						}
+					});
+				});
+			}
+
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(deleteButton);
 				}
 			}
 		});
