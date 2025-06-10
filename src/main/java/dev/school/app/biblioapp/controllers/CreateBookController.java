@@ -1,14 +1,15 @@
 package dev.school.app.biblioapp.controllers;
 
+import dev.school.app.biblioapp.models.Book;
 import javafx.fxml.FXML;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class CreateBookController implements Initializable {
 
@@ -52,45 +53,65 @@ public class CreateBookController implements Initializable {
         String firstName = authorFirstNameField.getText().trim();
         String lastName = authorLastNameField.getText().trim();
         String description = descriptionField.getText().trim();
-        String publicationYearStr = publicationYearField.getText().trim();
-        String columnStr = columnField.getText().trim();
-        String rowStr = rowField.getText().trim();
+        String publicationYear = publicationYearField.getText().trim();
+        String column = columnField.getText().trim();
+        String row = rowField.getText().trim();
         String imageUrl = imageUrlField.getText().trim();
         boolean isBorrowed = borrowed.isSelected();
 
-        // Required fields check
+        // Validation: required fields
         if (title.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Champs manquants", "Veuillez remplir au minimum le titre et le nom de l'auteur.");
+            showAlert(Alert.AlertType.WARNING, "Champs manquants",
+                    "Veuillez remplir au minimum le titre et le nom de l'auteur.");
             return;
         }
 
-        // Validate numeric inputs
-        int publicationYear = 0, column = 0, row = 0;
+        // Validation: publication year must be an integer
+        int year;
         try {
-            if (!publicationYearStr.isEmpty()) publicationYear = Integer.parseInt(publicationYearStr);
-            if (!columnStr.isEmpty()) column = Integer.parseInt(columnStr);
-            if (!rowStr.isEmpty()) row = Integer.parseInt(rowStr);
+            year = Integer.parseInt(publicationYear);
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez entrer des valeurs numériques valides pour l'année, la colonne et la rangée.");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "L'année de publication doit être un nombre valide.");
             return;
         }
 
-        // Show confirmation alert
-        showAlert(Alert.AlertType.INFORMATION, "Livre ajouté", 
-            "Livre ajouté : " + title +
-            "\nAuteur : " + firstName + " " + lastName +
-            "\nAnnée : " + publicationYear +
-            "\nDescription : " + description +
-            "\nColonne : " + column +
-            "\nRangée : " + row +
-            "\nEmprunté : " + (isBorrowed ? "Oui" : "Non"));
+        // Validation: column and row must be integers
+        int col;
+        int rowNumber;
+        try {
+            col = Integer.parseInt(column);
+            rowNumber = Integer.parseInt(row);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Les champs Colonne et Rangée doivent être des nombres valides.");
+            return;
+        }
 
-        // Clear form fields
+        // Create the Book object
+        Book book = new Book(
+                title,
+                firstName,
+                lastName,
+                description,
+                year,
+                col,
+                rowNumber,
+                imageUrl,
+                isBorrowed
+        );
+
+        // (Optional) Here you could add the book to a database, list, or TableView!
+
+        // Confirmation dialog with Book's toString
+        showAlert(Alert.AlertType.INFORMATION, "Livre ajouté", "Le livre a bien été ajouté :\n\n" + book.toString());
+
+        // Clear the form
         clearForm();
     }
 
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
