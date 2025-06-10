@@ -9,6 +9,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class CreateBookController implements Initializable {
@@ -43,6 +45,9 @@ public class CreateBookController implements Initializable {
     @FXML
     private Button submitButton;
 
+    // Liste simulée des livres existants
+    private List<Book> bookList = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         submitButton.setOnAction(event -> handleAddBook());
@@ -59,14 +64,13 @@ public class CreateBookController implements Initializable {
         String imageUrl = imageUrlField.getText().trim();
         boolean isBorrowed = borrowed.isSelected();
 
-        // Validation: required fields
+        // Validation des champs obligatoires
         if (title.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Champs manquants",
                     "Veuillez remplir au minimum le titre et le nom de l'auteur.");
             return;
         }
 
-        // Validation: publication year must be an integer
         int year;
         try {
             year = Integer.parseInt(publicationYear);
@@ -76,7 +80,6 @@ public class CreateBookController implements Initializable {
             return;
         }
 
-        // Validation: column and row must be integers
         int col;
         int rowNumber;
         try {
@@ -88,25 +91,41 @@ public class CreateBookController implements Initializable {
             return;
         }
 
-        // Create the Book object
-        Book book = new Book(
-                title,
-                firstName,
-                lastName,
-                description,
-                year,
-                col,
-                rowNumber,
-                imageUrl,
-                isBorrowed
-        );
+        if (col < 1 || col > 7 || rowNumber < 1 || rowNumber > 7) {
+            showAlert(Alert.AlertType.ERROR, "Valeurs incorrectes",
+                    "Les champs Colonne et Rangée doivent être des nombres entre 1 et 7.");
+            return;
+        }
 
-        // (Optional) Here you could add the book to a database, list, or TableView!
+        // Vérification d'unicité
+        boolean exists = bookList.stream()
+                .anyMatch(book -> book.getTitle().equalsIgnoreCase(title)
+                        && book.getAuthorFirstName().equalsIgnoreCase(firstName)
+                        && book.getAuthorLastName().equalsIgnoreCase(lastName)
+                        && book.getPublicationYear() == year);
 
-        // Confirmation dialog with Book's toString
-        showAlert(Alert.AlertType.INFORMATION, "Livre ajouté", "Le livre a bien été ajouté :\n\n" + book.toString());
+        if (exists) {
+            showAlert(Alert.AlertType.ERROR, "Livre existant",
+                    "Un livre avec ce titre, auteur et année de publication existe déjà.");
+            return;
+        }
 
-        // Clear the form
+        int currentYear = java.time.Year.now().getValue();
+        if (year > currentYear) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+            "L'année de publication ne peut pas être supérieure à l'année en cours (" + currentYear + ").");
+            return;
+        }
+
+        // Création du livre
+        Book book = new Book(title, firstName, lastName, description, year, col, rowNumber, imageUrl, isBorrowed);
+
+        // Ajout à la liste
+        bookList.add(book);
+
+        showAlert(Alert.AlertType.INFORMATION, "Livre ajouté",
+                "Le livre a bien été ajouté :\n\n" + book.toString());
+
         clearForm();
     }
 
