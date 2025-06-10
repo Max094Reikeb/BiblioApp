@@ -30,6 +30,7 @@ public class BookPage {
 	 * @param book     Livre dont on veut la page PDF.
 	 * @throws IOException Exception générée en cas d'erreur.
 	 */
+	@SuppressWarnings("exports")
 	public BookPage(PDDocument document, Book book) throws IOException {
 		PDPage page = new PDPage(PDRectangle.A4);
 		document.addPage(page);
