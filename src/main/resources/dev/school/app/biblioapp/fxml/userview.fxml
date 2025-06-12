@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.4"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dev.school.app.biblioapp.controllers.UserViewController">
+    <VBox spacing="10" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0">
+        <Label text="Gestion des utilisateurs" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+
+        <TableView fx:id="userTable">
+            <columns>
+                <TableColumn fx:id="usernameColumn" text="Username"/>
+                <TableColumn fx:id="passwordColumn" text="Mot de passe"/>
+                <TableColumn fx:id="adminColumn" text="Admin"/>
+                <TableColumn fx:id="actionsColumn" text="Actions"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Ajouter un utilisateur" onAction="#onAddUser"/>
+            <Button text="Sauvegarder les modifications" onAction="#onSaveUsers"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

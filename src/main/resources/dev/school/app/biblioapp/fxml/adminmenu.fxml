@@ -32,6 +32,11 @@
                     <FontAwesomeIconView glyphName="ANCHOR" size="20" text=""/>
                 </graphic>
             </Button>
+            <Button fx:id="manage_users_btn" mnemonicParsing="false" text="%sidebar.button.manageUsers">
+                <graphic>
+                    <FontAwesomeIconView glyphName="ANCHOR" size="20" text=""/>
+                </graphic>
+            </Button>
             <Button fx:id="logout_bnt" mnemonicParsing="false" styleClass="alt_menu_bnt" text="%sidebar.button.logout">
                 <graphic>
                     <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="20"/>
