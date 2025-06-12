@@ -76,3 +76,14 @@
 .password-field:focused .text {
     -fx-fill: transparent; /* Masque le texte indicatif */
 }
+
+/* Texte avec un look de MenuItem */
+.menu-item-look {
+    -fx-padding: 4 20 4 20;
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.menu-item-look:hover {
+    -fx-background-color: derive(-fx-accent, 50%);
+}
