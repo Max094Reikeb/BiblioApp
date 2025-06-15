@@ -22,7 +22,6 @@ public class BookPage {
 
 	private static final Logger LOGGER = Main.getLogger();
 	private final ResourceBundle bundle = Main.getBundle();
-	private final PDPage page;
 
 	/**
 	 * Classe type générant une page PDF pour un livre de la bibliothèque.
@@ -31,22 +30,23 @@ public class BookPage {
 	 * @param book     Livre dont on veut la page PDF.
 	 * @throws IOException Exception générée en cas d'erreur.
 	 */
+	@SuppressWarnings("exports")
 	public BookPage(PDDocument document, Book book) throws IOException {
-		this.page = new PDPage(PDRectangle.A4);
+		PDPage page = new PDPage(PDRectangle.A4);
 		document.addPage(page);
 
 		try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 			contentStream.beginText();
-			contentStream.setFont(PDType1Font.HELVETICA, 14);
+			contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
 			contentStream.newLineAtOffset(50, 750);
 
-			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("book.title")) + " " + book.getTitle());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookTitle")) + " " + book.getTitle());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("book.author")) + " " + book.getAuthorFirstName() + " " + book.getAuthorLastName());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookAuthor")) + " " + book.getAuthorFirstName() + " " + book.getAuthorLastName());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("book.resume")) + " " + book.getDescription());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookResume")) + " " + book.getDescription());
 			contentStream.newLineAtOffset(0, -20);
-			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("book.year.pub")) + " " + book.getPublicationYear());
+			contentStream.showText(MessageFormat.format(bundle.getString("order.colon"), bundle.getString("bookPubYear")) + " " + book.getPublicationYear());
 			contentStream.newLineAtOffset(0, -20);
 			contentStream.endText();
 
@@ -94,9 +94,5 @@ public class BookPage {
 			connection.disconnect();
 		}
 		return null;
-	}
-
-	public PDPage getPage() {
-		return this.page;
 	}
 }
