@@ -51,8 +51,8 @@ public class AboutWindow {
 		titleBox.setSpacing(10);
 		titleBox.getChildren().addAll(
 				new Label(bundle.getString("menu.aboutBiblioApp") + "..."),
-				new Label(bundle.getString("version") + " " + Main.getVersion()),
-				new Label(bundle.getString("authors") + ":")
+				new Label(bundle.getString("app.version") + " " + Main.getVersion()),
+				new Label(bundle.getString("app.authors") + ":")
 		);
 
 		for (int i = 0; i < authors.length; i++) {

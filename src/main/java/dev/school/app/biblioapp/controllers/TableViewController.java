@@ -1,7 +1,10 @@
 package dev.school.app.biblioapp.controllers;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
 import dev.school.app.biblioapp.models.Book;
+import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
 import javafx.event.ActionEvent;
@@ -17,7 +20,13 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageFitDestination;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,9 +41,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +54,7 @@ public class TableViewController implements Initializable {
 	private static final Logger LOGGER = Main.getLogger();
 	private final ResourceBundle bundle = Main.getBundle();
 
-	private List<Book> books = new ArrayList<>();
+	private List<Book> books;
 	private File currentFile = null;
 
 	@FXML
@@ -91,11 +102,16 @@ public class TableViewController implements Initializable {
 	@FXML
 	private TableColumn<Book, Boolean> borrowedColumn;
 
+	@FXML
+	private TableColumn<Book, Void> deleteColumn;
+
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		books = Model.getInstance().getBooks();
+
 		openMenuItem.setOnAction(this::openFile);
 		exportMenuItem.setOnAction(this::exportToPDF);
 		quitMenuItem.setOnAction(this::closeApp);
@@ -131,6 +147,50 @@ public class TableViewController implements Initializable {
 					} catch (Exception e) {
 						setGraphic(null);
 					}
+				}
+			}
+		});
+
+		deleteColumn.setCellFactory(column -> new TableCell<>() {
+			private final Button deleteButton = new Button();
+
+			{
+				FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+				icon.setGlyphSize(16);
+				icon.getStyleClass().add("delete-icon");
+
+				deleteButton.setGraphic(icon);
+				deleteButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				deleteButton.setOnAction(e -> {
+					Book book = getTableView().getItems().get(getIndex());
+
+					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+					confirm.setTitle(bundle.getString("book.delete.title"));
+					confirm.setHeaderText(bundle.getString("book.delete.header"));
+					confirm.setContentText(MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()));
+
+					ButtonType yes = new ButtonType(bundle.getString("book.delete.yes"), ButtonBar.ButtonData.YES);
+					ButtonType no = new ButtonType(bundle.getString("book.delete.no"), ButtonBar.ButtonData.NO);
+
+					confirm.getButtonTypes().setAll(yes, no);
+
+					confirm.showAndWait().ifPresent(response -> {
+						if (response == yes) {
+							bookTable.getItems().remove(book);
+							books.remove(book);
+						}
+					});
+				});
+			}
+
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(deleteButton);
 				}
 			}
 		});
@@ -257,72 +317,224 @@ public class TableViewController implements Initializable {
 
 		if (file != null) {
 			try (PDDocument document = new PDDocument()) {
-				// TODO: Page de couverture
+				// Variables globales
+				int mainFontSize = 26;
+				int titleFontSize = 20;
+				PDFont titleFont = PDType1Font.HELVETICA_BOLD;
+				PDFont smallFont = PDType1Font.HELVETICA;
+
+				// 1. Page de couverture
 				PDPage titlePage = new PDPage(PDRectangle.A4);
 				document.addPage(titlePage);
-				try (var contentStream = new PDPageContentStream(document, titlePage)) {
+				String mainTitle = bundle.getString("pdfExport.titlePage.title");
+				float mainTitleWidth = titleFont.getStringWidth(mainTitle) / 1000 * mainFontSize;
+				float mainTitleHeight = titleFont.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * mainFontSize;
+				try (PDPageContentStream contentStream = new PDPageContentStream(document, titlePage)) {
 					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 24);
-					contentStream.newLineAtOffset(100, 750);
-					contentStream.showText(bundle.getString("pdfExport.titlePage.title"));
+					contentStream.setFont(titleFont, mainFontSize);
+					contentStream.newLineAtOffset((titlePage.getMediaBox().getWidth() - mainTitleWidth) / 2, (titlePage.getMediaBox().getHeight() / 2) - (mainTitleHeight / 2));
+					contentStream.showText(mainTitle);
 					contentStream.endText();
-				}
 
-				// TODO: Page sommaire avec liens cliquables
-				PDPage tocPage = new PDPage(PDRectangle.A4);
-				document.addPage(tocPage);
-				try (PDPageContentStream contentStream = new PDPageContentStream(document, tocPage)) {
-					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 20);
-					contentStream.newLineAtOffset(50, 750);
-					contentStream.showText(bundle.getString("pdfExport.tocPage.title"));
-					contentStream.setFont(PDType1Font.HELVETICA, 14);
-
-					int yOffset = 700;
-					int pageIndex = 2; // Start after TOC
-					for (Book book : books) {
-						if (yOffset < 50) {
-							contentStream.endText();
-							yOffset = 750;
-							contentStream.beginText();
-							contentStream.newLineAtOffset(50, yOffset);
-						}
-						contentStream.newLineAtOffset(0, -20);
-						yOffset -= 20;
-						contentStream.showText(book.getTitle() + " (Page " + pageIndex + ")");
-						pageIndex++;
+					File imgFile = new File("src/main/resources/dev/school/app/biblioapp/images/biblioapp.png");
+					if (imgFile.exists()) {
+						PDImageXObject img = PDImageXObject.createFromFileByExtension(imgFile, document);
+						int imgWidth = 250;
+						int imgHeight = 150;
+						contentStream.drawImage(img, (titlePage.getMediaBox().getWidth() - imgWidth) / 2, (float) ((titlePage.getMediaBox().getHeight() / 2) + (mainTitleHeight * 1.5)), imgWidth, imgHeight);
+					} else {
+						LOGGER.log(Level.SEVERE, "Image not found: " + imgFile);
 					}
-					contentStream.endText();
 				}
 
+				// 2. Génération des pages des livres
+				List<PDPage> bookPages = new ArrayList<>();
 				for (Book book : books) {
-					new BookPage(document, book); // Une page par livre
+					PDPage page = new BookPage(document, book).getPage();
+					bookPages.add(page);
 				}
 
-				// TODO: Page avec tableau de livres empruntés
+				// 3. Page sommaire avec liens cliquables
+				PDPage tocPage = new PDPage(PDRectangle.A4);
+				document.getPages().insertAfter(tocPage, document.getPage(0));
+
+				try (PDPageContentStream contentStream = new PDPageContentStream(document, tocPage)) {
+					float startY = 750;
+					contentStream.setFont(titleFont, titleFontSize);
+					contentStream.beginText();
+					contentStream.newLineAtOffset(50, startY);
+					contentStream.showText(bundle.getString("pdfExport.tocPage.title"));
+					contentStream.endText();
+					contentStream.setFont(smallFont, 14);
+					startY -= 40;
+
+					for (int i = 0; i < books.size(); i++) {
+						Book book = books.get(i);
+						PDPage bookPage = bookPages.get(i);
+						int pageNumber = document.getPages().indexOf(bookPage) + 1;
+
+						String title = book.getTitle();
+						String pageStr = String.valueOf(pageNumber);
+						float titleWidth = smallFont.getStringWidth(title) / 1000 * 14;
+						float pageWidth = smallFont.getStringWidth(pageStr) / 1000 * 14;
+						float dotsWidth = smallFont.getStringWidth(".") / 1000 * 14;
+
+						int dotCount = (int) ((500 - titleWidth - pageWidth) / dotsWidth);
+						if (dotCount < 0) dotCount = 0;
+
+						String dots = ".".repeat(dotCount);
+						String line = title + dots + pageStr;
+						float textY = startY - (i * 20f);
+
+						contentStream.beginText();
+						contentStream.newLineAtOffset(50, textY);
+						contentStream.showText(line);
+						contentStream.endText();
+
+						PDPageDestination dest = new PDPageFitDestination();
+						dest.setPage(bookPage);
+						PDActionGoTo action = new PDActionGoTo();
+						action.setDestination(dest);
+
+						PDAnnotationLink link = new PDAnnotationLink();
+						PDRectangle linkRect = new PDRectangle(50, textY - 3, 500, 15);
+						link.setRectangle(linkRect);
+						link.setAction(action);
+						tocPage.getAnnotations().add(link);
+					}
+				}
+
+				// 4. Page avec tableau de livres empruntés
 				PDPage borrowedPage = new PDPage(PDRectangle.A4);
 				document.addPage(borrowedPage);
-				try (PDPageContentStream contentStream = new PDPageContentStream(document, borrowedPage)) {
-					contentStream.beginText();
-					contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
-					contentStream.newLineAtOffset(50, 750);
-					contentStream.showText(bundle.getString("pdfExport.borrowedPage.title"));
 
-					contentStream.setFont(PDType1Font.HELVETICA, 12);
-					int yOffset = 700;
-					contentStream.newLineAtOffset(0, -20);
-					for (Book book : books.stream().filter(Book::isBorrowed).toList()) {
-						if (yOffset < 50) {
-							contentStream.endText();
-							yOffset = 750;
-							contentStream.beginText();
-							contentStream.newLineAtOffset(50, yOffset);
+				List<Book> borrowedBooks = books.stream().filter(Book::isBorrowed).toList();
+				float leading = 1.5f * 10;
+				float margin = 50;
+				float yStart = 750;
+				float minY = 50;
+				float tableWidth = PDRectangle.A4.getWidth() - 2 * margin;
+				float[] colPercents = {0.2f, 0.2f, 0.45f, 0.15f};
+				float[] colWidths = new float[colPercents.length];
+				for (int i = 0; i < colPercents.length; i++) {
+					colWidths[i] = tableWidth * colPercents[i];
+				}
+				String[] headers = {"Titre", "Auteur", "Description", "Année"};
+
+				String sectionTitle = bundle.getString("pdfExport.borrowedPage.title");
+				float y = yStart;
+
+				BiFunction<String, Float, List<String>> wrapText = (text, width) -> {
+					List<String> lines = new ArrayList<>();
+					String[] words = text.split(" ");
+					StringBuilder line = new StringBuilder();
+					for (String word : words) {
+						String testLine = line.isEmpty() ? word : line + " " + word;
+						try {
+							float w = smallFont.getStringWidth(testLine) / 1000 * 10;
+							if (w > width) {
+								lines.add(line.toString());
+								line = new StringBuilder(word);
+							} else {
+								line = new StringBuilder(testLine);
+							}
+						} catch (IOException e) {
+							lines.add(line.toString());
+							line = new StringBuilder(word);
 						}
-						contentStream.newLineAtOffset(0, -15);
-						yOffset -= 15;
-						contentStream.showText(book.getTitle() + " | " + book.getAuthorFirstName() + " " + book.getAuthorLastName() + " | " + book.getDescription() + " | " + book.getPublicationYear());
 					}
-					contentStream.endText();
+					if (!line.isEmpty()) lines.add(line.toString());
+					return lines;
+				};
+
+				int rowIdx = 0;
+				while (rowIdx < borrowedBooks.size()) {
+					try (PDPageContentStream contentStream = new PDPageContentStream(document, borrowedPage)) {
+						contentStream.setFont(titleFont, titleFontSize);
+						y -= 10;
+						contentStream.beginText();
+						contentStream.newLineAtOffset(margin, y);
+						contentStream.showText(sectionTitle);
+						contentStream.endText();
+						y -= 30;
+
+						contentStream.setFont(titleFont, 10);
+						float textX = margin + 2;
+						float textY = y - 10;
+						for (int i = 0; i < headers.length; i++) {
+							contentStream.beginText();
+							contentStream.newLineAtOffset(textX, textY);
+							contentStream.showText(headers[i]);
+							contentStream.endText();
+							textX += colWidths[i];
+						}
+						y -= 20;
+
+						contentStream.setFont(smallFont, 10);
+
+						while (rowIdx < borrowedBooks.size()) {
+							Book book = borrowedBooks.get(rowIdx);
+							String[] row = {
+									book.getTitle(),
+									book.getAuthorFirstName() + " " + book.getAuthorLastName(),
+									book.getDescription(),
+									String.valueOf(book.getPublicationYear())
+							};
+
+							List<List<String>> wrappedCells = new ArrayList<>();
+							int maxLines = 1;
+							for (int i = 0; i < row.length; i++) {
+								List<String> wrapped = wrapText.apply(row[i], colWidths[i] - 4);
+								wrappedCells.add(wrapped);
+								if (wrapped.size() > maxLines) maxLines = wrapped.size();
+							}
+
+							float rowHeight = leading * maxLines + 5;
+							if (y - rowHeight < minY) break;
+
+							for (int line = 0; line < maxLines; line++) {
+								textX = margin + 2;
+								textY = y - 10;
+								for (int i = 0; i < wrappedCells.size(); i++) {
+									String txt = line < wrappedCells.get(i).size() ? wrappedCells.get(i).get(line) : "";
+									contentStream.beginText();
+									contentStream.newLineAtOffset(textX, textY);
+									contentStream.showText(txt);
+									contentStream.endText();
+									textX += colWidths[i];
+								}
+								y -= leading;
+							}
+
+							contentStream.moveTo(margin, y);
+							contentStream.lineTo(margin + tableWidth, y);
+							contentStream.stroke();
+							y -= 5;
+
+							rowIdx++;
+						}
+					} catch (IOException e) {
+						LOGGER.log(Level.SEVERE, e.getMessage(), e);
+					}
+
+					if (rowIdx < borrowedBooks.size()) {
+						borrowedPage = new PDPage(PDRectangle.A4);
+						document.addPage(borrowedPage);
+						y = yStart;
+					}
+				}
+
+				// 5. En-têtes
+				String headerText = MessageFormat.format(bundle.getString("pdfExport.header.export"), file.getName(), java.time.LocalDate.now());
+				for (int i = 2; i < document.getNumberOfPages(); i++) {
+					PDPage page = document.getPage(i);
+					try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
+						contentStream.beginText();
+						contentStream.setFont(PDType1Font.HELVETICA_OBLIQUE, 10);
+						contentStream.newLineAtOffset(50, 800);
+						contentStream.showText(headerText);
+						contentStream.endText();
+					}
 				}
 
 				document.save(file); // On sauvegarde le document PDF
