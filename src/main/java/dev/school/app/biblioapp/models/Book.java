@@ -6,6 +6,7 @@ import javafx.beans.property.*;
  * Classe-type représentant un livre dans la bibliothèque.
  * Contient des propriétés liantes (bindings) pour mettre à jour la table FXML.
  */
+
 public class Book {
 	private final SimpleStringProperty title;
 	private final SimpleStringProperty authorFirstName;
@@ -16,7 +17,6 @@ public class Book {
 	private final SimpleIntegerProperty row;
 	private final SimpleStringProperty pathImage;
 	private final SimpleBooleanProperty borrowed;
-
 
 	/**
 	 * Initialisation d'un livre-type de la bibliothèque.
@@ -30,6 +30,7 @@ public class Book {
 	 * @param row             Rangée où se trouve le livre physiquement dans la bibliothèque.
 	 * @param borrowed        Est-ce que le livre a été emprunté ou non.
 	 */
+
 	public Book(String title, String authorFirstName, String authorLastName, String description, int publicationYear,
 				int column, int row, String pathImage, boolean borrowed) {
 		this.title = new SimpleStringProperty(title);
@@ -48,6 +49,7 @@ public class Book {
 	 *
 	 * @return Le titre du livre.
 	 */
+
 	public String getTitle() {
 		return title.get();
 	}
@@ -57,6 +59,7 @@ public class Book {
 	 *
 	 * @return Le prénom de l'auteur du livre.
 	 */
+	
 	public String getAuthorFirstName() {
 		return authorFirstName.get();
 	}
