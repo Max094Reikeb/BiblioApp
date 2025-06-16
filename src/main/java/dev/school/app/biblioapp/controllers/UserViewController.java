@@ -1,5 +1,7 @@
 package dev.school.app.biblioapp.controllers;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
 import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.models.UserManager;
@@ -8,13 +10,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -44,6 +47,15 @@ public class UserViewController implements Initializable {
 	@FXML
 	private TableColumn<User, Void> actionsColumn;
 
+	@FXML
+	private TextField usernameField;
+
+	@FXML
+	private PasswordField passwordField;
+
+	@FXML
+	private CheckBox adminCheckBox;
+
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
 	 */
@@ -54,14 +66,75 @@ public class UserViewController implements Initializable {
 
 		aboutLabel.setOnMouseClicked(e -> new AboutWindow());
 
-		usernameColumn.setCellValueFactory(data ->
-				new javafx.beans.property.SimpleStringProperty(data.getValue().getUsername()));
-		passwordColumn.setCellValueFactory(data ->
-				new javafx.beans.property.SimpleStringProperty(data.getValue().getPassword()));
-		adminColumn.setCellValueFactory(data ->
-				new javafx.beans.property.SimpleBooleanProperty(data.getValue().isAdmin()));
+		usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+		passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+		adminColumn.setCellValueFactory(new PropertyValueFactory<>("isAdmin"));
 
-		// TODO: Add delete/edit action buttons here
+		actionsColumn.setCellFactory(column -> new TableCell<>() {
+			private final Button editButton = new Button();
+			private final Button deleteButton = new Button();
+			private final HBox actionButtons = new HBox(5);
+
+
+			{
+				// Edit button
+				FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.PENCIL);
+				editIcon.setGlyphSize(16);
+				editIcon.getStyleClass().add("edit-icon");
+
+				editButton.setGraphic(editIcon);
+				editButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				editButton.setOnAction(e -> {
+					User user = getTableView().getItems().get(getIndex());
+
+					usernameField.setText(user.getUsername());
+					passwordField.setText(user.getPassword());
+					adminCheckBox.setSelected(user.isAdmin());
+				});
+
+				// Delete button
+				FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
+				icon.setGlyphSize(16);
+				icon.getStyleClass().add("delete-icon");
+
+				deleteButton.setGraphic(icon);
+				deleteButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				deleteButton.setOnAction(e -> {
+					User user = getTableView().getItems().get(getIndex());
+
+					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+					confirm.setTitle(bundle.getString("user.delete.title"));
+					confirm.setHeaderText(bundle.getString("user.delete.header"));
+					confirm.setContentText(MessageFormat.format(bundle.getString("user.delete.message"), user.getUsername()));
+
+					ButtonType yes = new ButtonType(bundle.getString("user.delete.yes"), ButtonBar.ButtonData.YES);
+					ButtonType no = new ButtonType(bundle.getString("user.delete.no"), ButtonBar.ButtonData.NO);
+
+					confirm.getButtonTypes().setAll(yes, no);
+
+					confirm.showAndWait().ifPresent(response -> {
+						if (response == yes) {
+							userTable.getItems().remove(user);
+							// TODO: Remove user
+						}
+					});
+				});
+
+				actionButtons.getChildren().addAll(editButton, deleteButton);
+			}
+
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(actionButtons);
+				}
+			}
+		});
 	}
 
 	@FXML
@@ -86,5 +159,14 @@ public class UserViewController implements Initializable {
 
 		LOGGER.info("Closing app...");
 		stage.close();
+	}
+
+	/**
+	 * Function permettant de nettoyer le formulaire de création d'utilisateur.
+	 */
+	private void clearForm() {
+		usernameField.clear();
+		passwordField.clear();
+		adminCheckBox.setSelected(false);
 	}
 }

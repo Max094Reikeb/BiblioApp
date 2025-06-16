@@ -9,9 +9,9 @@ import javafx.beans.property.StringProperty;
  * Classe-type d'un utilisateur de l'application.
  */
 public class User {
-	private final StringProperty username;
-	private final StringProperty password;
-	private final BooleanProperty isAdmin;
+	private final SimpleStringProperty username;
+	private final SimpleStringProperty password;
+	private final SimpleBooleanProperty isAdmin;
 
 	/**
 	 * Initialisation d'un utilisateur-type de l'application.

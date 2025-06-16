@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <AnchorPane prefHeight="745.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.4"
             stylesheets="@../styles/tableview.css"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -13,18 +14,36 @@
         <top>
             <ToolBar>
                 <Label fx:id="aboutLabel" text="%menu.aboutBiblioApp" styleClass="menu-item-look"/>
-                <Label fx:id="quitLabel" text="%menu.quit" onMouseClicked="#closeApp" styleClass="menu-item-look"/>
+                <Label text="%menu.quit" onMouseClicked="#closeApp" styleClass="menu-item-look"/>
             </ToolBar>
         </top>
         <center>
-            <TableView styleClass="custom-background" fx:id="userTable" style="-fx-background-color: silver;">
-                <columns>
-                    <TableColumn fx:id="usernameColumn" text="%user.username"/>
-                    <TableColumn fx:id="passwordColumn" text="%user.password"/>
-                    <TableColumn fx:id="adminColumn" text="%user.admin"/>
-                    <TableColumn fx:id="actionsColumn" text="%user.table.actions" sortable="false"/>
-                </columns>
-            </TableView>
+            <SplitPane dividerPositions="0.6">
+                <TableView styleClass="custom-background" fx:id="userTable" style="-fx-background-color: silver;">
+                    <columns>
+                        <TableColumn fx:id="usernameColumn" text="%user.username"/>
+                        <TableColumn fx:id="passwordColumn" text="%user.password"/>
+                        <TableColumn fx:id="adminColumn" text="%user.admin"/>
+                        <TableColumn fx:id="actionsColumn" text="%user.table.actions" sortable="false"/>
+                    </columns>
+                </TableView>
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="%user.form.title" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <Label text="%user.username"/>
+                    <TextField fx:id="usernameField" promptText="%user.form.username"/>
+
+                    <Label text="%user.password"/>
+                    <PasswordField fx:id="passwordField" promptText="%user.form.password"/>
+
+                    <CheckBox fx:id="adminCheckBox" text="%user.form.admin"/>
+
+                    <Button text="Save" onAction="#onSaveUsers"/>
+                </VBox>
+            </SplitPane>
         </center>
         <bottom>
             <HBox spacing="10">
