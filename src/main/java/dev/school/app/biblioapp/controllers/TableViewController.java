@@ -5,6 +5,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
 import dev.school.app.biblioapp.models.Book;
 import dev.school.app.biblioapp.models.Model;
+import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
 import javafx.event.ActionEvent;
@@ -111,6 +112,7 @@ public class TableViewController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		books = Model.getInstance().getBooks();
+		User currentUser = Model.getInstance().getCurrentUser();
 
 		openMenuItem.setOnAction(this::openFile);
 		exportMenuItem.setOnAction(this::exportToPDF);
@@ -129,6 +131,9 @@ public class TableViewController implements Initializable {
 		imageColumn.setCellValueFactory(new PropertyValueFactory<>("pathImage"));
 		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
 
+		if (currentUser == null || !currentUser.isAdmin()) {
+			deleteColumn.setVisible(false);
+		}
 		imageColumn.setCellFactory(column -> new TableCell<>() {
 			private final ImageView imageView = new ImageView();
 
