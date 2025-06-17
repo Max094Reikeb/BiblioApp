@@ -14,6 +14,7 @@ public class AdminMenuController implements Initializable {
 	public Button book_list_btn;
 	public Button create_book_btn;
 	public Button borrowing_book_list_btn;
+	public Button manage_users_btn;
 	public Button logout_bnt;
 
 	@Override
@@ -24,6 +25,7 @@ public class AdminMenuController implements Initializable {
 	private void addListener() {
 		book_list_btn.setOnAction(event -> onBooks());
 		create_book_btn.setOnAction(event -> onCreateBook());
+		manage_users_btn.setOnAction(event -> onManageUsers());
 		logout_bnt.setOnAction(event -> onLogout());
 	}
 
@@ -33,6 +35,10 @@ public class AdminMenuController implements Initializable {
 
 	private void onCreateBook() {
 		Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.CREATE_BOOK);
+	}
+
+	private void onManageUsers() {
+		Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.MANAGE_USERS);
 	}
 
 	private void onLogout() {
