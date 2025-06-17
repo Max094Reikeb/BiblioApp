@@ -166,12 +166,12 @@ public class TableViewController implements Initializable {
 					Book book = getTableView().getItems().get(getIndex());
 
 					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-					confirm.setTitle(bundle.getString("book.delete.title"));
-					confirm.setHeaderText(bundle.getString("book.delete.header"));
+					confirm.setTitle(bundle.getString("global.delete.title"));
+					confirm.setHeaderText(bundle.getString("global.delete.header"));
 					confirm.setContentText(MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()));
 
-					ButtonType yes = new ButtonType(bundle.getString("book.delete.yes"), ButtonBar.ButtonData.YES);
-					ButtonType no = new ButtonType(bundle.getString("book.delete.no"), ButtonBar.ButtonData.NO);
+					ButtonType yes = new ButtonType(bundle.getString("global.yes"), ButtonBar.ButtonData.YES);
+					ButtonType no = new ButtonType(bundle.getString("global.no"), ButtonBar.ButtonData.NO);
 
 					confirm.getButtonTypes().setAll(yes, no);
 

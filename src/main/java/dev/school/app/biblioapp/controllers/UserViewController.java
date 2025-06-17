@@ -105,12 +105,12 @@ public class UserViewController implements Initializable {
 					User user = getTableView().getItems().get(getIndex());
 
 					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-					confirm.setTitle(bundle.getString("user.delete.title"));
-					confirm.setHeaderText(bundle.getString("user.delete.header"));
+					confirm.setTitle(bundle.getString("global.delete.title"));
+					confirm.setHeaderText(bundle.getString("global.delete.header"));
 					confirm.setContentText(MessageFormat.format(bundle.getString("user.delete.message"), user.getUsername()));
 
-					ButtonType yes = new ButtonType(bundle.getString("user.delete.yes"), ButtonBar.ButtonData.YES);
-					ButtonType no = new ButtonType(bundle.getString("user.delete.no"), ButtonBar.ButtonData.NO);
+					ButtonType yes = new ButtonType(bundle.getString("global.yes"), ButtonBar.ButtonData.YES);
+					ButtonType no = new ButtonType(bundle.getString("global.no"), ButtonBar.ButtonData.NO);
 
 					confirm.getButtonTypes().setAll(yes, no);
 
