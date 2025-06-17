@@ -9,7 +9,6 @@ public class Model {
 	private static Model model;
 	private final ViewFactory viewFactory;
 	private final ObservableList<Book> bookObservableList;
-	private User currentUser;
 
 	private Model() {
 		this.viewFactory = new ViewFactory();
@@ -29,13 +28,5 @@ public class Model {
 
 	public ObservableList<Book> getBooks() {
 		return bookObservableList;
-	}
-
-	public void setCurrentUser(User user) {
-		this.currentUser = user;
-	}
-
-	public User getCurrentUser() {
-		return currentUser;
 	}
 }
