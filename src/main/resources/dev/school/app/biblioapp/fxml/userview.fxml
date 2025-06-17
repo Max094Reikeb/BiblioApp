@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <AnchorPane prefHeight="745.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.4"
             stylesheets="@../styles/tableview.css"
@@ -41,18 +40,9 @@
 
                     <CheckBox fx:id="adminCheckBox" text="%user.form.admin"/>
 
-                    <Button text="Save" onAction="#onSaveUsers"/>
+                    <Button text="Save" onAction="#onSave"/>
                 </VBox>
             </SplitPane>
         </center>
-        <bottom>
-            <HBox spacing="10">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <Button text="%user.table.add" onAction="#onAddUser"/>
-                <Button text="%user.table.save" onAction="#onSaveUsers"/>
-            </HBox>
-        </bottom>
     </BorderPane>
 </AnchorPane>

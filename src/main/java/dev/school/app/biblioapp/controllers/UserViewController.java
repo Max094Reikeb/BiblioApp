@@ -29,6 +29,8 @@ public class UserViewController implements Initializable {
 	private final ObservableList<User> users = FXCollections.observableArrayList();
 	private final UserManager userManager = new UserManager("src/main/resources/dev/school/app/biblioapp/users.xml");
 
+	private User editingUser = null;
+
 	@FXML
 	private Label aboutLabel;
 
@@ -87,10 +89,7 @@ public class UserViewController implements Initializable {
 
 				editButton.setOnAction(e -> {
 					User user = getTableView().getItems().get(getIndex());
-
-					usernameField.setText(user.getUsername());
-					passwordField.setText(user.getPassword());
-					adminCheckBox.setSelected(user.isAdmin());
+					enterEditMode(user);
 				});
 
 				// Delete button
@@ -117,7 +116,7 @@ public class UserViewController implements Initializable {
 					confirm.showAndWait().ifPresent(response -> {
 						if (response == yes) {
 							userTable.getItems().remove(user);
-							// TODO: Remove user
+							userManager.removeUser(user);
 						}
 					});
 				});
@@ -137,13 +136,36 @@ public class UserViewController implements Initializable {
 		});
 	}
 
+	/**
+	 * Fonction s'exécutant lorsque l'utilisateur sauvegarde un utilisateur.
+	 */
 	@FXML
-	private void onAddUser() {
-		// TODO: Open a form to create a new user
-	}
+	private void onSave() {
+		String username = usernameField.getText();
+		String password = passwordField.getText();
+		boolean isAdmin = adminCheckBox.isSelected();
 
-	@FXML
-	private void onSaveUsers() {
+		if (username.isEmpty() || password.isEmpty()) {
+			showError("user.form.error.fields");
+			return;
+		}
+
+		if ((userManager.userExists(username) && editingUser == null) ||
+				(userManager.userExists(username) && editingUser != null && !editingUser.getUsername().equals(username))) {
+			showError("user.form.error.username");
+			return;
+		}
+
+		if (editingUser != null) {
+			users.remove(editingUser);
+			editingUser = null;
+		}
+
+		User myUser = new User(username, password, isAdmin);
+		users.add(myUser);
+
+		userTable.refresh();
+		clearForm();
 		userManager.saveUsers(users);
 	}
 
@@ -168,5 +190,26 @@ public class UserViewController implements Initializable {
 		usernameField.clear();
 		passwordField.clear();
 		adminCheckBox.setSelected(false);
+	}
+
+	/**
+	 * Fonction pour entrer en mode moddification
+	 *
+	 * @param user Utilisateur à modifier
+	 */
+	private void enterEditMode(User user) {
+		editingUser = user;
+
+		usernameField.setText(user.getUsername());
+		passwordField.setText(user.getPassword());
+		adminCheckBox.setSelected(user.isAdmin());
+	}
+
+	private void showError(String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle(bundle.getString("global.error"));
+		alert.setHeaderText(null);
+		alert.setContentText(bundle.getString(message));
+		alert.showAndWait();
 	}
 }
