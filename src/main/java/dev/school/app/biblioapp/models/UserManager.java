@@ -30,7 +30,13 @@ public class UserManager {
 		loadUsers(xmlPath);
 	}
 
+	/**
+	 * Loads user data from the specified XML file and populates the internal list of users.
+	 *
+	 * @param path the file path to the XML document containing user data
+	 */
 	private void loadUsers(String path) {
+		users.clear();
 		try {
 			File xmlFile = new File(path);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -50,6 +56,15 @@ public class UserManager {
 		}
 	}
 
+	/**
+	 * Authenticates a user by validating the provided username and password
+	 * against the stored list of users. If a match is found, the corresponding
+	 * user object is returned; otherwise, null is returned.
+	 *
+	 * @param username the username provided for authentication
+	 * @param password the password provided for authentication
+	 * @return the authenticated user object if credentials are valid, or null if no match is found
+	 */
 	public User authenticate(String username, String password) {
 		for (User u : users) {
 			if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
@@ -59,10 +74,20 @@ public class UserManager {
 		return null;
 	}
 
+	/**
+	 * Retrieves a list of all users stored internally.
+	 *
+	 * @return a list containing all the users
+	 */
 	public List<User> getAllUsers() {
 		return new ArrayList<>(users);
 	}
 
+	/**
+	 * Saves the provided list of users to an XML file and updates the internal user list.
+	 *
+	 * @param usersToSave the list of users to be saved
+	 */
 	public void saveUsers(List<User> usersToSave) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -94,5 +119,25 @@ public class UserManager {
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Removes the specified user from the list of users and updates the storage.
+	 *
+	 * @param userToRemove the user to be removed from the list
+	 */
+	public void removeUser(User userToRemove) {
+		users.removeIf(u -> u.getUsername().equals(userToRemove.getUsername()));
+		saveUsers(users);
+	}
+
+	/**
+	 * Checks if a user with the specified username exists in the list of users.
+	 *
+	 * @param username the username to search for
+	 * @return true if a user with the given username exists, otherwise false
+	 */
+	public boolean userExists(String username) {
+		return users.stream().anyMatch(u -> u.getUsername().equals(username));
 	}
 }
