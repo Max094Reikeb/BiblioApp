@@ -3,6 +3,7 @@ package dev.school.app.biblioapp.controllers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.AlertManager;
 import dev.school.app.biblioapp.models.Book;
 import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.views.AboutWindow;
@@ -165,22 +166,17 @@ public class TableViewController implements Initializable {
 				deleteButton.setOnAction(e -> {
 					Book book = getTableView().getItems().get(getIndex());
 
-					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-					confirm.setTitle(bundle.getString("book.delete.title"));
-					confirm.setHeaderText(bundle.getString("book.delete.header"));
-					confirm.setContentText(MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()));
-
-					ButtonType yes = new ButtonType(bundle.getString("book.delete.yes"), ButtonBar.ButtonData.YES);
-					ButtonType no = new ButtonType(bundle.getString("book.delete.no"), ButtonBar.ButtonData.NO);
-
-					confirm.getButtonTypes().setAll(yes, no);
-
-					confirm.showAndWait().ifPresent(response -> {
-						if (response == yes) {
-							bookTable.getItems().remove(book);
-							books.remove(book);
-						}
-					});
+					AlertManager.showAlert(Alert.AlertType.CONFIRMATION,
+							bundle.getString("global.delete.title"), bundle.getString("global.delete.header"),
+							MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()),
+							response -> {
+								if (response == ButtonType.OK) {
+									bookTable.getItems().remove(book);
+									books.remove(book);
+								}
+							},
+							ButtonType.OK, ButtonType.CANCEL
+					);
 				});
 			}
 
@@ -295,12 +291,9 @@ public class TableViewController implements Initializable {
 	@FXML
 	void exportToPDF(ActionEvent event) {
 		if (books.isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle(bundle.getString("pdfExport.error.title"));
-			alert.setHeaderText(bundle.getString("pdfExport.error.header"));
-			alert.setContentText(bundle.getString("pdfExport.error.message"));
+			AlertManager.showAlert(Alert.AlertType.ERROR, bundle.getString("pdfExport.error.title"),
+					bundle.getString("pdfExport.error.header"), bundle.getString("pdfExport.error.message"));
 			LOGGER.info("Empty book list, cannot export to PDF!");
-			alert.showAndWait();
 			return;
 		}
 
