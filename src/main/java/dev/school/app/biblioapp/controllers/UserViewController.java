@@ -3,6 +3,8 @@ package dev.school.app.biblioapp.controllers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.AlertManager;
+import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.models.UserManager;
 import dev.school.app.biblioapp.views.AboutWindow;
@@ -101,24 +103,29 @@ public class UserViewController implements Initializable {
 				deleteButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
 
 				deleteButton.setOnAction(e -> {
+					if (userTable.getItems().size() == 1) {
+						AlertManager.showError("user.delete.error.one");
+						return;
+					}
+
 					User user = getTableView().getItems().get(getIndex());
 
-					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-					confirm.setTitle(bundle.getString("global.delete.title"));
-					confirm.setHeaderText(bundle.getString("global.delete.header"));
-					confirm.setContentText(MessageFormat.format(bundle.getString("user.delete.message"), user.getUsername()));
+					if (user.getUsername().equals(Model.getInstance().getCurrentUser().getUsername())) {
+						AlertManager.showError("user.delete.error.yourself");
+						return;
+					}
 
-					ButtonType yes = new ButtonType(bundle.getString("global.yes"), ButtonBar.ButtonData.YES);
-					ButtonType no = new ButtonType(bundle.getString("global.no"), ButtonBar.ButtonData.NO);
-
-					confirm.getButtonTypes().setAll(yes, no);
-
-					confirm.showAndWait().ifPresent(response -> {
-						if (response == yes) {
-							userTable.getItems().remove(user);
-							userManager.removeUser(user);
-						}
-					});
+					AlertManager.showAlert(Alert.AlertType.CONFIRMATION,
+							bundle.getString("global.delete.title"), bundle.getString("global.delete.header"),
+							MessageFormat.format(bundle.getString("user.delete.message"), user.getUsername()),
+							response -> {
+								if (response == ButtonType.OK) {
+									userTable.getItems().remove(user);
+									userManager.removeUser(user);
+								}
+							},
+							ButtonType.OK, ButtonType.CANCEL
+					);
 				});
 
 				actionButtons.getChildren().addAll(editButton, deleteButton);
@@ -146,13 +153,13 @@ public class UserViewController implements Initializable {
 		boolean isAdmin = adminCheckBox.isSelected();
 
 		if (username.isEmpty() || password.isEmpty()) {
-			showError("user.form.error.fields");
+			AlertManager.showError("user.form.error.fields");
 			return;
 		}
 
 		if ((userManager.userExists(username) && editingUser == null) ||
 				(userManager.userExists(username) && editingUser != null && !editingUser.getUsername().equals(username))) {
-			showError("user.form.error.username");
+			AlertManager.showError("user.form.error.username");
 			return;
 		}
 
@@ -203,13 +210,5 @@ public class UserViewController implements Initializable {
 		usernameField.setText(user.getUsername());
 		passwordField.setText(user.getPassword());
 		adminCheckBox.setSelected(user.isAdmin());
-	}
-
-	private void showError(String message) {
-		Alert alert = new Alert(Alert.AlertType.ERROR);
-		alert.setTitle(bundle.getString("global.error"));
-		alert.setHeaderText(null);
-		alert.setContentText(bundle.getString(message));
-		alert.showAndWait();
 	}
 }
