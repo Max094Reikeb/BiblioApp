@@ -60,6 +60,12 @@ public class ViewFactory {
 		createStage(loader);
 	}
 
+	public void showLoginPageWindow() {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/login.fxml"));
+		loader.setResources(bundle);
+		createStage(loader);
+	}
+
 	private void createStage(FXMLLoader loader) {
 		Scene scene;
 		try {
@@ -68,7 +74,7 @@ public class ViewFactory {
 			stage.setScene(scene);
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.png"))));
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.icns"))));
-			stage.setResizable(false);
+			stage.setResizable(true);
 			stage.setTitle(bundle.getString("app.title"));
 			stage.show();
 		} catch (Exception e) {
