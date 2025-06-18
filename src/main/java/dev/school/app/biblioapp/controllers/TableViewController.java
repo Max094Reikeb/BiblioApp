@@ -9,14 +9,19 @@ import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -105,6 +110,9 @@ public class TableViewController implements Initializable {
 	private TableColumn<Book, Boolean> borrowedColumn;
 
 	@FXML
+	private TableColumn<Book, Void> editColumn;
+
+	@FXML
 	private TableColumn<Book, Void> deleteColumn;
 
 	/**
@@ -130,9 +138,25 @@ public class TableViewController implements Initializable {
 		columnColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
 		rowColumn.setCellValueFactory(new PropertyValueFactory<>("row"));
 		imageColumn.setCellValueFactory(new PropertyValueFactory<>("pathImage"));
-		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
+
+		borrowedColumn.setCellValueFactory(cellData ->
+				new SimpleBooleanProperty(!cellData.getValue().isBorrowed()));
+
+		borrowedColumn.setCellFactory(column -> new TableCell<>() {
+			@Override
+			protected void updateItem(Boolean isAvailable, boolean empty) {
+				super.updateItem(isAvailable, empty);
+				if (empty || isAvailable == null) {
+					setText(null);
+				} else {
+					setText(isAvailable ? bundle.getString("book.status.available") : bundle.getString("book.status.borrowed"));
+				}
+			}
+		});
+
 
 		if (currentUser == null || !currentUser.isAdmin()) {
+			editColumn.setVisible(false);
 			deleteColumn.setVisible(false);
 		}
 		imageColumn.setCellFactory(column -> new TableCell<>() {
@@ -153,6 +177,34 @@ public class TableViewController implements Initializable {
 					} catch (Exception e) {
 						setGraphic(null);
 					}
+				}
+			}
+		});
+
+		editColumn.setCellFactory(column -> new TableCell<>() {
+			private final Button editButton = new Button();
+
+			{
+				FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.PENCIL);
+				editIcon.setGlyphSize(16);
+				editIcon.getStyleClass().add("edit-icon");
+
+				editButton.setGraphic(editIcon);
+				editButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				editButton.setOnAction(e -> {
+					Book bookToEdit = getTableView().getItems().get(getIndex());
+					onEditBook(bookToEdit);
+				});
+			}
+
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(editButton);
 				}
 			}
 		});
@@ -195,6 +247,8 @@ public class TableViewController implements Initializable {
 				}
 			}
 		});
+
+		bookTable.setItems(Model.getInstance().getBooks());
 	}
 
 	/**
@@ -236,8 +290,6 @@ public class TableViewController implements Initializable {
 			books.clear(); // On clear books pour éviter de la duplication
 			try {
 				books.addAll(parseXML(selectedFile)); // On load les livres depuis le fichier sélectionné
-				bookTable.getItems().clear(); // On clear books depuis la bookTable pour aussi éviter une dupplication
-				bookTable.getItems().addAll(books); // On update la bookTable avec les nouveaux livres
 				LOGGER.info("Loaded " + books.size() + " books");
 				books.forEach(book -> LOGGER.info("Book loaded: " + book));
 			} catch (Exception e) {
@@ -541,6 +593,37 @@ public class TableViewController implements Initializable {
 			}
 		} else {
 			LOGGER.log(Level.SEVERE, "No file selected");
+		}
+	}
+
+	/**
+	 * Gère la modification d'un {@Book} en ouvrant une popup.
+	 *
+	 * @param selectedBook l'objet {@Book} à modifier.
+	 */
+	private void onEditBook(Book selectedBook) {
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/dev/school/app/biblioapp/fxml/bookdialog.fxml"),
+					bundle
+			);
+			AnchorPane pane = loader.load();
+
+			BookDialogController controller = loader.getController();
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle(bundle.getString("book.dialog.title.edit"));
+			dialogStage.initModality(Modality.APPLICATION_MODAL);
+			dialogStage.setScene(new Scene(pane));
+			controller.setDialogStage(dialogStage);
+			controller.setBook(selectedBook, true);
+
+			dialogStage.showAndWait();
+
+			if (controller.isSaved()) {
+				bookTable.refresh();
+			}
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to load BookDialog.fxml: " + e.getMessage(), e);
 		}
 	}
 

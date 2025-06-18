@@ -20,7 +20,6 @@ public class ViewFactory {
 
 	private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 	private AnchorPane tableView;
-	private AnchorPane createBookView;
 	private AnchorPane usersTableView;
 
 	public ViewFactory() {
@@ -42,17 +41,6 @@ public class ViewFactory {
 
 	public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem() {
 		return adminSelectedMenuItem;
-	}
-
-	public AnchorPane getCreateBookView() {
-		if (createBookView == null) {
-			try {
-				createBookView = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/createbook.fxml")).load();
-			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			}
-		}
-		return createBookView;
 	}
 
 	public AnchorPane getUsersTableWindow() {
