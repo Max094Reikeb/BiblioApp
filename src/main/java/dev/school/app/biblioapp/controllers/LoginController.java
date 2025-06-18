@@ -1,12 +1,13 @@
 package dev.school.app.biblioapp.controllers;
 
 import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.AlertManager;
 import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.models.UserManager;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -18,21 +19,29 @@ import java.util.logging.Logger;
 public class LoginController implements Initializable {
 
 	private static final Logger LOGGER = Main.getLogger();
-	private final ResourceBundle bundle = Main.getBundle();
 
 	private UserManager userManager;
 
+	@FXML
 	public TextField user_account_field;
+	@FXML
 	public TextField password_field;
-	public Button login_btn;
-	public Label user_account_lbl;
 
+	@FXML
+	public Button login_btn;
+
+	/**
+	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		userManager = new UserManager("src/main/resources/dev/school/app/biblioapp/users.xml");
 		login_btn.setOnAction(event -> onLogin());
 	}
 
+	/**
+	 * Fonction permettant de gérer la connexion de l'utilisateur
+	 */
 	private void onLogin() {
 		String username = user_account_field.getText();
 		String password = password_field.getText();
@@ -51,7 +60,7 @@ public class LoginController implements Initializable {
 				Model.getInstance().getViewFactory().showUserWindow();
 			}
 		} else {
-			user_account_lbl.setText(bundle.getString("login.error"));
+			AlertManager.showError("login.error");
 		}
 	}
 }
