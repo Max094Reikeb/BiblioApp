@@ -31,6 +31,12 @@ public class Model {
 		return bookObservableList;
 	}
 
+	public void saveBook(Book book, boolean isEditMode) {
+		if (!isEditMode) {
+			getBooks().add(book);
+		}
+	}
+
 	public void setCurrentUser(User user) {
 		this.currentUser = user;
 	}
