@@ -50,7 +50,6 @@ public class AdminController implements Initializable {
 
 		Model.getInstance().getViewFactory().getAdminSelectedMenuItem().addListener((observableValue, oldVal, newVal) -> {
 			AnchorPane view = switch (newVal) {
-				case CREATE_BOOK -> Model.getInstance().getViewFactory().getCreateBookView();
 				case MANAGE_USERS -> Model.getInstance().getViewFactory().getUsersTableWindow();
 				default -> Model.getInstance().getViewFactory().getTableView();
 			};

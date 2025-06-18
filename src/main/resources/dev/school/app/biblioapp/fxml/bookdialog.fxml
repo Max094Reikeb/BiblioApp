@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="dev.school.app.biblioapp.controllers.BookDialogController"
+            prefWidth="400.0" prefHeight="500.0"
+            style="-fx-padding: 20;">
+    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          AnchorPane.bottomAnchor="0">
+        <Label text="%book.title" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+        <VBox spacing="8">
+            <TextField fx:id="titleField" promptText="%book.title"/>
+            <HBox spacing="8">
+                <TextField fx:id="authorFirstNameField" promptText="%book.author.firstName" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="authorLastNameField" promptText="%book.author.lastName" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <TextField fx:id="descriptionField" promptText="%book.resume"/>
+            <TextField fx:id="publicationYearField" promptText="%book.year.pub"/>
+        </VBox>
+
+        <HBox spacing="8">
+            <TextField fx:id="columnField" promptText="%book.column" HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="rowField" promptText="%book.row" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <TextField fx:id="imageUrlField" promptText="%book.image"/>
+        <CheckBox fx:id="borrowed" text="%book.borrowed"/>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="%menu.save" onAction="#handleSave" defaultButton="true"/>
+            <Button text="%global.cancel" onAction="#handleCancel" cancelButton="true"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
