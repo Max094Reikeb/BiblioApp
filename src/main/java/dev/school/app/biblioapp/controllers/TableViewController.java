@@ -9,6 +9,7 @@ import dev.school.app.biblioapp.models.Model;
 import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -137,7 +138,22 @@ public class TableViewController implements Initializable {
 		columnColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
 		rowColumn.setCellValueFactory(new PropertyValueFactory<>("row"));
 		imageColumn.setCellValueFactory(new PropertyValueFactory<>("pathImage"));
-		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
+
+		borrowedColumn.setCellValueFactory(cellData ->
+				new SimpleBooleanProperty(!cellData.getValue().isBorrowed()));
+
+		borrowedColumn.setCellFactory(column -> new TableCell<>() {
+			@Override
+			protected void updateItem(Boolean isAvailable, boolean empty) {
+				super.updateItem(isAvailable, empty);
+				if (empty || isAvailable == null) {
+					setText(null);
+				} else {
+					setText(isAvailable ? bundle.getString("book.status.available") : bundle.getString("book.status.borrowed"));
+				}
+			}
+		});
+
 
 		if (currentUser == null || !currentUser.isAdmin()) {
 			editColumn.setVisible(false);
