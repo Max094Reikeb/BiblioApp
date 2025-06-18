@@ -109,6 +109,9 @@ public class TableViewController implements Initializable {
 
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 *
+	 * @param location  l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
+	 * @param resources le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -198,9 +201,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut fermer l'application. (via le bouton "Quitter")
+	 * Gère la fermeture de l'application.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void closeApp(ActionEvent event) {
@@ -213,9 +216,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut ouvrir un fichier XML contenant des livres. (via le bouton "Ouvrir")
+	 * Gère l'ouverture d'un fichier XML contenant des livres.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void openFile(ActionEvent event) {
@@ -249,9 +252,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut sauvegarder la bibliothèque. (via le bouton "Sauvegarder")
+	 * Gère la sauvegarde de la bibliothèque.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void saveFile(ActionEvent event) {
@@ -263,9 +266,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut sauvegarder la bibliothèqye dans un nouveau fichier XML. (via le bouton "Sauvegarder sous...")
+	 * Gère la sauvegarde de la bibliothèqye dans un nouveau fichier XML.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void saveAsFile(ActionEvent event) {
@@ -289,9 +292,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut exporter la bibliothèque en un fichier PDF. (via le bouton "Exporter")
+	 * Gère l'exportation de la bibliothèque en un fichier PDF.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void exportToPDF(ActionEvent event) {
@@ -545,11 +548,11 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction permettant de parser un fichier XML en une liste de @Book.
+	 * Parse un fichier XML en une liste d'objets {@Book}.
 	 *
-	 * @param file Fichier XML à parser
-	 * @return Une liste de @Book
-	 * @throws Exception Exception retournée si le fichier XML ne contient pas de livres valides.
+	 * @param file fichier XML à parser.
+	 * @return une liste d'objets {@Book}.
+	 * @throws Exception si le fichier XML ne contient pas de livres valides.
 	 */
 	private List<Book> parseXML(File file) throws Exception {
 		List<Book> books = new ArrayList<>();
@@ -587,9 +590,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction permettant de sauvegarder les livres chargés dans la bibliothèque dans un fichier XML.
+	 * Sauvegarde les livres chargés dans la bibliothèque dans un fichier XML.
 	 *
-	 * @param file Le fichier XML de sauvegarde.
+	 * @param file le fichier XML de sauvegarde.
 	 */
 	private void save(File file) {
 		try {
