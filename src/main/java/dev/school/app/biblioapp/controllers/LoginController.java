@@ -32,6 +32,9 @@ public class LoginController implements Initializable {
 
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 *
+	 * @param location  l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
+	 * @param resources le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -40,7 +43,7 @@ public class LoginController implements Initializable {
 	}
 
 	/**
-	 * Fonction permettant de gérer la connexion de l'utilisateur
+	 * Gère la connexion de l'utilisateur.
 	 */
 	private void onLogin() {
 		String username = user_account_field.getText();
@@ -60,6 +63,7 @@ public class LoginController implements Initializable {
 				Model.getInstance().getViewFactory().showUserWindow();
 			}
 		} else {
+			LOGGER.log(Level.INFO, "Login failed for: ", username);
 			AlertManager.showError("login.error");
 		}
 	}

@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserViewController implements Initializable {
@@ -62,6 +63,9 @@ public class UserViewController implements Initializable {
 
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 *
+	 * @param location  l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
+	 * @param resources le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -144,7 +148,7 @@ public class UserViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur sauvegarde un utilisateur.
+	 * Gère la sauvegarde d'un utilisateur.
 	 */
 	@FXML
 	private void onSave() {
@@ -154,12 +158,14 @@ public class UserViewController implements Initializable {
 
 		if (username.isEmpty() || password.isEmpty()) {
 			AlertManager.showError("user.form.error.fields");
+			LOGGER.log(Level.INFO, "Failed to create user: missing fields!");
 			return;
 		}
 
 		if ((userManager.userExists(username) && editingUser == null) ||
 				(userManager.userExists(username) && editingUser != null && !editingUser.getUsername().equals(username))) {
 			AlertManager.showError("user.form.error.username");
+			LOGGER.log(Level.INFO, "Failed to create user: username already taken!");
 			return;
 		}
 
@@ -174,12 +180,13 @@ public class UserViewController implements Initializable {
 		userTable.refresh();
 		clearForm();
 		userManager.saveUsers(users);
+		LOGGER.log(Level.INFO, "User created: ", myUser.toString());
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut fermer l'application. (via le bouton "Quitter")
+	 * Gère la fermeture de l'application.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void closeApp(MouseEvent event) {
@@ -191,7 +198,7 @@ public class UserViewController implements Initializable {
 	}
 
 	/**
-	 * Function permettant de nettoyer le formulaire de création d'utilisateur.
+	 * Nettoie le formulaire de création d'utilisateur.
 	 */
 	private void clearForm() {
 		usernameField.clear();
@@ -200,9 +207,9 @@ public class UserViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction pour entrer en mode moddification
+	 * Entre en mode "modification".
 	 *
-	 * @param user Utilisateur à modifier
+	 * @param user utilisateur à modifier.
 	 */
 	private void enterEditMode(User user) {
 		editingUser = user;
