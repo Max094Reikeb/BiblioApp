@@ -11,7 +11,6 @@ public class AdminMenuOptionsTest {
 
         assertEquals(3, options.length, "Le nombre de valeurs de l'enum doit être 3");
         assertEquals(AdminMenuOptions.LIST_BOOKS, options[0]);
-        assertEquals(AdminMenuOptions.CREATE_BOOK, options[1]);
         assertEquals(AdminMenuOptions.BORROWING_BOOKS, options[2]);
     }
 

@@ -4,13 +4,13 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 
-public class Model {
+public class ModelTest {
     // ...
 
     private final ObservableList<Book> bookObservableList;
     private final ObservableList<Book> unmodifiableBookList;
 
-    private Model() {
+    private ModelTest() {
         this.viewFactory = new ViewFactory();
         this.bookObservableList = FXCollections.observableArrayList();
         this.unmodifiableBookList = FXCollections.unmodifiableObservableList(bookObservableList);
