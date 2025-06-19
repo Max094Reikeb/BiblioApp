@@ -8,7 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AdminControllerTest extends ApplicationTest {
 
@@ -18,7 +19,7 @@ class AdminControllerTest extends ApplicationTest {
 	@Override
 	public void start(Stage stage) throws Exception {
 		FXMLLoader loader = new FXMLLoader(
-			getClass().getResource("/dev/school/app/biblioapp/fxml/admin.fxml")
+				getClass().getResource("/dev/school/app/biblioapp/fxml/admin.fxml")
 		);
 		root = loader.load();
 		controller = loader.getController();
@@ -40,13 +41,13 @@ class AdminControllerTest extends ApplicationTest {
 	void testLeftContainerExistsAndNotEmpty() {
 		assertNotNull(controller.getLeftContainer(), "left_container doit être initialisé.");
 		assertFalse(controller.getLeftContainer().getChildren().isEmpty(),
-			"left_container doit contenir au moins un élément.");
+				"left_container doit contenir au moins un élément.");
 	}
 
 	@Test
 	void testCenterContainerExistsAndNotEmpty() {
 		assertNotNull(controller.getCenterContainer(), "center_container doit être initialisé.");
 		assertFalse(controller.getCenterContainer().getChildren().isEmpty(),
-			"center_container doit contenir une vue par défaut.");
+				"center_container doit contenir une vue par défaut.");
 	}
 }

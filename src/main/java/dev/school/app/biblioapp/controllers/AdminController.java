@@ -67,4 +67,12 @@ public class AdminController implements Initializable {
 		AnchorPane.setLeftAnchor(view, 0.0);
 		AnchorPane.setRightAnchor(view, 0.0);
 	}
+
+	public AnchorPane getLeftContainer() {
+		return left_container;
+	}
+
+	public AnchorPane getCenterContainer() {
+		return center_container;
+	}
 }
