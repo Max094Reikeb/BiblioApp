@@ -1,31 +1,31 @@
-package main.java.dev.school.app.biblioapp.models;
+package dev.school.app.biblioapp.models;
 
-import javafx.collections.ObservableList;
+import dev.school.app.biblioapp.views.ViewFactory;
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
+import javafx.collections.ObservableList;
 
 public class ModelTest {
-    // ...
+	// ...
 
-    private final ObservableList<Book> bookObservableList;
-    private final ObservableList<Book> unmodifiableBookList;
+	private final ObservableList<Book> bookObservableList;
+	private final ObservableList<Book> unmodifiableBookList;
 
-    private ModelTest() {
-        this.viewFactory = new ViewFactory();
-        this.bookObservableList = FXCollections.observableArrayList();
-        this.unmodifiableBookList = FXCollections.unmodifiableObservableList(bookObservableList);
-    }
+	private ModelTest() {
+		this.viewFactory = new ViewFactory();
+		this.bookObservableList = FXCollections.observableArrayList();
+		this.unmodifiableBookList = FXCollections.unmodifiableObservableList(bookObservableList);
+	}
 
-    public ObservableList<Book> getBooks() {
-        return unmodifiableBookList;
-    }
+	public ObservableList<Book> getBooks() {
+		return unmodifiableBookList;
+	}
 
-    // Ajouter une méthode publique pour modifier la liste
-    public void addBook(Book book) {
-        bookObservableList.add(book);
-    }
+	// Ajouter une méthode publique pour modifier la liste
+	public void addBook(Book book) {
+		bookObservableList.add(book);
+	}
 
-    public void removeBook(Book book) {
-        bookObservableList.remove(book);
-    }
+	public void removeBook(Book book) {
+		bookObservableList.remove(book);
+	}
 }

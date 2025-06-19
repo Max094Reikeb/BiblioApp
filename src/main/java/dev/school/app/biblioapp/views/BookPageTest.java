@@ -1,4 +1,4 @@
-package main.java.dev.school.app.biblioapp.views;
+package dev.school.app.biblioapp.views;
 
 import dev.school.app.biblioapp.models.Book;
 import org.apache.pdfbox.pdmodel.PDDocument;

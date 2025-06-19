@@ -6,6 +6,9 @@ open module dev.school.app.biblioapp {
 	requires java.desktop;
 	requires org.apache.pdfbox;
 	requires de.jensd.fx.glyphs.fontawesome;
+	requires org.junit.jupiter.api;
+	requires org.testfx.junit5;
+	requires org.testfx;
 	requires transitive javafx.base;
 
 	exports dev.school.app.biblioapp.controllers;
