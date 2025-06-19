@@ -33,12 +33,12 @@ public class BookDialogControllerTest extends ApplicationTest {
 	@Test
 	void testEmptyTitleShowsError() {
 		interact(() -> {
-			controller.authorFirstNameField.setText("Victor");
-			controller.authorLastNameField.setText("Hugo");
-			controller.publicationYearField.setText("1862");
-			controller.columnField.setText("2");
-			controller.rowField.setText("3");
-			controller.handleSave();
+			controller.getAuthorFirstNameField().setText("Victor");
+			controller.getAuthorLastNameField().setText("Hugo");
+			controller.getPublicationYearField().setText("1862");
+			controller.getColumnField().setText("2");
+			controller.getRowField().setText("3");
+			controller.handlePublicSave();
 		});
 
 		assertFalse(controller.isSaved(), "Le livre ne devrait pas être sauvegardé si le titre est vide.");
@@ -47,15 +47,15 @@ public class BookDialogControllerTest extends ApplicationTest {
 	@Test
 	void testValidInputCreatesBook() {
 		interact(() -> {
-			controller.titleField.setText("Les Misérables");
-			controller.authorFirstNameField.setText("Victor");
-			controller.authorLastNameField.setText("Hugo");
-			controller.publicationYearField.setText("1862");
-			controller.columnField.setText("2");
-			controller.rowField.setText("3");
-			controller.imageUrlField.setText("img.jpg");
-			controller.borrowed.setSelected(false);
-			controller.handleSave();
+			controller.getTitleField().setText("Les Misérables");
+			controller.getAuthorFirstNameField().setText("Victor");
+			controller.getAuthorLastNameField().setText("Hugo");
+			controller.getPublicationYearField().setText("1862");
+			controller.getColumnField().setText("2");
+			controller.getRowField().setText("3");
+			controller.getImageUrlField().setText("img.jpg");
+			controller.getBorrowed().setSelected(false);
+			controller.handlePublicSave();
 		});
 
 		assertTrue(controller.isSaved(), "Le livre doit être sauvegardé avec des données valides.");

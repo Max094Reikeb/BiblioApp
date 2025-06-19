@@ -49,6 +49,46 @@ public class BookDialogController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 	}
 
+	public TextField getTitleField() {
+		return titleField;
+	}
+
+	public TextField getAuthorFirstNameField() {
+		return authorFirstNameField;
+	}
+
+	public TextField getAuthorLastNameField() {
+		return authorLastNameField;
+	}
+
+	public TextField getDescriptionField() {
+		return descriptionField;
+	}
+
+	public TextField getPublicationYearField() {
+		return publicationYearField;
+	}
+
+	public TextField getColumnField() {
+		return columnField;
+	}
+
+	public TextField getRowField() {
+		return rowField;
+	}
+
+	public TextField getImageUrlField() {
+		return imageUrlField;
+	}
+
+	public CheckBox getBorrowed() {
+		return borrowed;
+	}
+
+	public void handlePublicSave() {
+		handleSave();
+	}
+
 	/**
 	 * Gère la sauvegarde d'un objet {@Book}.
 	 */
