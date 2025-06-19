@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>openjfx-monocle</artifactId>
-            <version>jdk-17+11</version>
+            <version>8u76-b04</version>
             <scope>test</scope>
         </dependency>
 
