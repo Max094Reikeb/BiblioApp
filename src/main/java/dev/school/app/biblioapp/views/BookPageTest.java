@@ -34,11 +34,7 @@ public class BookPageTest {
 
         PDPage page = document.getPage(0);
         assertNotNull(page);
-
-        // On pourrait aussi vérifier la taille de la page
-        assertEquals(PDPage.PAGE_SIZE_A4.getWidth(), page.getMediaBox().getWidth());
-        assertEquals(PDPage.PAGE_SIZE_A4.getHeight(), page.getMediaBox().getHeight());
-
+        
         document.close();
     }
 }

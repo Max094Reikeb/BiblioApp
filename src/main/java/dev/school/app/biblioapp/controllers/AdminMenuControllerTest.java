@@ -23,7 +23,7 @@ public class AdminMenuControllerTest {
 	@Start
 	public void start(Stage stage) throws Exception {
 		var loader = new javafx.fxml.FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/admin-menu.fxml"));
-		loader.setResources(ResourceBundle.getBundle("dev.school.app.biblioapp.bundles.lang", Locale.FRENCH)); // adapte si nécessaire
+		loader.setResources(ResourceBundle.getBundle("dev.school.app.biblioapp.bundles.lang", Locale.FRENCH)); 
 		AnchorPane root = loader.load();
 		controller = loader.getController();
 
@@ -41,7 +41,21 @@ public class AdminMenuControllerTest {
 	@Test
 	void testClickCreateBookButton(FxRobot robot) {
 		robot.clickOn("#create_book_btn");
-		// TODO : ajouter une vérification après le clic si un dialogue s’ouvre
-		// Par exemple : vérifier si un Stage modal est ouvert (si tu extrais la logique dans une méthode testable)
 	}
+
+    @Test
+    void testClickCreateBookButton(FxRobot robot) {
+    robot.clickOn("#create_book_btn");
+
+    FxRobot waitRobot = new FxRobot();
+    Stage dialogStage = waitRobot.listTargetWindows().stream()
+            .filter(w -> w instanceof Stage)
+            .map(w -> (Stage) w)
+            .filter(Stage::isShowing)
+            .filter(stage -> stage.getTitle().equals("Ajouter un livre")) 
+            .findFirst()
+            .orElse(null);
+
+    assertNotNull(dialogStage, "La fenêtre de dialogue pour ajouter un livre devrait s’ouvrir.");
+}
 }

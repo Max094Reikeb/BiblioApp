@@ -107,4 +107,12 @@ public class AdminMenuController implements Initializable {
 		Model.getInstance().getViewFactory().closeStage(stage);
 		Model.getInstance().getViewFactory().showLoginPageWindow();
 	}
+
+	public AnchorPane getLeftContainer() {
+		return left_container;
+	}
+
+	public AnchorPane getCenterContainer() {
+		return center_container;
+	}
 }

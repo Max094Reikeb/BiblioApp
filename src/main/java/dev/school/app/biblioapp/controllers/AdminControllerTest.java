@@ -8,17 +8,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AdminControllerTest extends ApplicationTest {
 
 	private AdminController controller;
+	private AnchorPane root;
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/admin.fxml"));
-		AnchorPane root = loader.load();
+		FXMLLoader loader = new FXMLLoader(
+			getClass().getResource("/dev/school/app/biblioapp/fxml/admin.fxml")
+		);
+		root = loader.load();
 		controller = loader.getController();
 		stage.setScene(new Scene(root));
 		stage.show();
@@ -26,21 +28,25 @@ class AdminControllerTest extends ApplicationTest {
 
 	@BeforeEach
 	void setUp() {
-		// Initialisation possible ici
+		assertNotNull(controller, "Le contrôleur AdminController ne doit pas être null.");
 	}
 
 	@Test
 	void testControllerIsNotNull() {
-		assertNotNull(controller, "AdminController should be loaded and not null");
+		assertNotNull(controller, "Le contrôleur AdminController ne doit pas être null.");
 	}
 
 	@Test
-	void testLeftContainerIsLoaded() {
-		assertFalse(controller.left_container.getChildren().isEmpty(), "Left container should contain the admin menu");
+	void testLeftContainerExistsAndNotEmpty() {
+		assertNotNull(controller.getLeftContainer(), "left_container doit être initialisé.");
+		assertFalse(controller.getLeftContainer().getChildren().isEmpty(),
+			"left_container doit contenir au moins un élément.");
 	}
 
 	@Test
-	void testInitialCenterViewIsLoaded() {
-		assertFalse(controller.center_container.getChildren().isEmpty(), "Center container should contain the default view");
+	void testCenterContainerExistsAndNotEmpty() {
+		assertNotNull(controller.getCenterContainer(), "center_container doit être initialisé.");
+		assertFalse(controller.getCenterContainer().getChildren().isEmpty(),
+			"center_container doit contenir une vue par défaut.");
 	}
 }
