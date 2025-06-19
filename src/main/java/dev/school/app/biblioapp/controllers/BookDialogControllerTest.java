@@ -1,201 +1,66 @@
 package main.java.dev.school.app.biblioapp.controllers;
 
-import dev.school.app.biblioapp.models.AlertManager;
 import dev.school.app.biblioapp.models.Book;
-import dev.school.app.biblioapp.models.Model;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.ApplicationTest;
 
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class BookDialogController implements Initializable {
+public class BookDialogControllerTest extends ApplicationTest {
 
-	private Stage dialogStage;
-	private Book book;
-	private boolean saved = false;
-	private boolean isEditMode = false;
+    private BookDialogController controller;
 
-	@FXML
-	private TextField titleField;
-	@FXML
-	private TextField authorFirstNameField;
-	@FXML
-	private TextField authorLastNameField;
-	@FXML
-	private TextField descriptionField;
-	@FXML
-	private TextField publicationYearField;
-	@FXML
-	private TextField columnField;
-	@FXML
-	private TextField rowField;
-	@FXML
-	private TextField imageUrlField;
-	@FXML
-	private CheckBox borrowed;
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/bookdialog.fxml"));
+        Parent root = loader.load();
+        controller = loader.getController();
+        controller.setDialogStage(stage);
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
-	/**
-	 * Fonction principale se lançant lors de l'initialisation du controller.
-	 *
-	 * @param location  l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
-	 * @param resources le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
-	 */
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
+    @BeforeEach
+    void setupEach() {
+        interact(() -> controller.setBook(null, false)); // Mode création
+    }
 
-	/**
-	 * Gère la sauvegarde d'un objet {@Book}.
-	 */
-	@FXML
-	private void handleSave() {
-		String title = titleField.getText().trim();
-		String firstName = authorFirstNameField.getText().trim();
-		String lastName = authorLastNameField.getText().trim();
-		String description = descriptionField.getText().trim();
-		String publicationYear = publicationYearField.getText().trim();
-		String column = columnField.getText().trim();
-		String row = rowField.getText().trim();
-		String imageUrl = imageUrlField.getText().trim();
-		boolean isBorrowed = borrowed.isSelected();
+    @Test
+    void testEmptyTitleShowsError() {
+        interact(() -> {
+            controller.authorFirstNameField.setText("Victor");
+            controller.authorLastNameField.setText("Hugo");
+            controller.publicationYearField.setText("1862");
+            controller.columnField.setText("2");
+            controller.rowField.setText("3");
+            controller.handleSave();
+        });
 
-		if (title.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-			AlertManager.showError("book.form.error.missing");
-			return;
-		}
+        assertFalse(controller.isSaved(), "Le livre ne devrait pas être sauvegardé si le titre est vide.");
+    }
 
-		int year;
-		try {
-			year = Integer.parseInt(publicationYear);
-		} catch (NumberFormatException e) {
-			AlertManager.showError("book.form.error.publish");
-			return;
-		}
+    @Test
+    void testValidInputCreatesBook() {
+        interact(() -> {
+            controller.titleField.setText("Les Misérables");
+            controller.authorFirstNameField.setText("Victor");
+            controller.authorLastNameField.setText("Hugo");
+            controller.publicationYearField.setText("1862");
+            controller.columnField.setText("2");
+            controller.rowField.setText("3");
+            controller.imageUrlField.setText("img.jpg");
+            controller.borrowed.setSelected(false);
+            controller.handleSave();
+        });
 
-		int col;
-		int rowNumber;
-		try {
-			col = Integer.parseInt(column);
-			rowNumber = Integer.parseInt(row);
-		} catch (NumberFormatException e) {
-			AlertManager.showError("book.form.error.number");
-			return;
-		}
-
-		if (col < 1 || col > 7 || rowNumber < 1 || rowNumber > 7) {
-			AlertManager.showError("book.form.error.outbound");
-			return;
-		}
-
-		List<Book> bookList = Model.getInstance().getBooks();
-		boolean duplicate = bookList.stream().anyMatch(b ->
-				b != book && b.getTitle().equalsIgnoreCase(title)
-						&& b.getAuthorFirstName().equalsIgnoreCase(firstName)
-						&& b.getAuthorLastName().equalsIgnoreCase(lastName)
-						&& b.getPublicationYear() == year
-		);
-
-		if (duplicate) {
-			AlertManager.showError("book.form.error.unique");
-			return;
-		}
-
-		int currentYear = java.time.Year.now().getValue();
-		if (year > currentYear) {
-			AlertManager.showError("book.form.error.year");
-			return;
-		}
-
-		if (!isEditMode) {
-			book = new Book(
-					title,
-					firstName,
-					lastName,
-					description,
-					year,
-					col,
-					rowNumber,
-					imageUrl,
-					isBorrowed
-			);
-		} else {
-			book.titleProperty().set(title);
-			book.authorFirstNameProperty().set(firstName);
-			book.authorLastNameProperty().set(lastName);
-			book.descriptionProperty().set(description);
-			book.publicationYearProperty().set(year);
-			book.columnProperty().set(col);
-			book.rowProperty().set(rowNumber);
-			book.pathImageProperty().set(imageUrl);
-			book.borrowedProperty().set(isBorrowed);
-		}
-
-		Model.getInstance().saveBook(book, isEditMode);
-
-		saved = true;
-		dialogStage.close();
-	}
-
-	/**
-	 * Gère l'arrêt de l'action utilisateur et la fermeture de la fenêtre.
-	 */
-	@FXML
-	private void handleCancel() {
-		dialogStage.close();
-	}
-
-	/**
-	 * Met les données du livre dans les champs et initialize le formulaire.
-	 *
-	 * @param book       l'objet {@Book} dont on veut les données.
-	 * @param isEditMode indique si on est en mode édition ou non.
-	 */
-	public void setBook(Book book, boolean isEditMode) {
-		this.book = book;
-		this.isEditMode = isEditMode;
-
-		if (book != null) {
-			titleField.setText(book.getTitle());
-			authorFirstNameField.setText(book.getAuthorFirstName());
-			authorLastNameField.setText(book.getAuthorLastName());
-			descriptionField.setText(book.getDescription());
-			publicationYearField.setText(String.valueOf(book.getPublicationYear()));
-			columnField.setText(String.valueOf(book.getColumn()));
-			rowField.setText(String.valueOf(book.getRow()));
-			imageUrlField.setText(book.getPathImage());
-			borrowed.setSelected(book.isBorrowed());
-		}
-	}
-
-	/**
-	 * Met la scène pour la fenêtre de dialogue.
-	 *
-	 * @param stage la scène utilisée.
-	 */
-	public void setDialogStage(Stage stage) {
-		this.dialogStage = stage;
-	}
-
-	/**
-	 * Vérifie si l'état actuel est sauvegardé.
-	 *
-	 * @return true si l'état est sauvegardé, false sinon.
-	 */
-	public boolean isSaved() {
-		return saved;
-	}
-
-	/**
-	 * Retourne l'instance {@Book} actuellement associée avec ce controller.
-	 *
-	 * @return l'instance {@Book}.
-	 */
-	public Book getBook() {
-		return book;
-	}
+        assertTrue(controller.isSaved(), "Le livre doit être sauvegardé avec des données valides.");
+        Book createdBook = controller.getBook();
+        assertNotNull(createdBook);
+        assertEquals("Les Misérables", createdBook.getTitle());
+    }
 }
