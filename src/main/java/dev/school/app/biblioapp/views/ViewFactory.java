@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 public class ViewFactory {
 
 	private static final Logger LOGGER = Main.getLogger();
-	private final ResourceBundle bundle = Main.getBundle();
 
 	private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 	private AnchorPane tableView;
@@ -30,7 +29,7 @@ public class ViewFactory {
 		if (tableView == null) {
 			try {
 				FXMLLoader tableViewLoader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/tableview.fxml"));
-				tableViewLoader.setResources(bundle);
+				tableViewLoader.setResources(getBundle());
 				tableView = tableViewLoader.load();
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -47,7 +46,7 @@ public class ViewFactory {
 		if (usersTableView == null) {
 			try {
 				FXMLLoader usersTableLoader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/userview.fxml"));
-				usersTableLoader.setResources(bundle);
+				usersTableLoader.setResources(getBundle());
 				usersTableView = usersTableLoader.load();
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -58,19 +57,19 @@ public class ViewFactory {
 
 	public void showUserWindow() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/tableview.fxml"));
-		loader.setResources(bundle);
+		loader.setResources(getBundle());
 		createStage(loader);
 	}
 
 	public void showAdminWindow() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/admin.fxml"));
-		loader.setResources(bundle);
+		loader.setResources(getBundle());
 		createStage(loader);
 	}
 
 	public void showLoginPageWindow() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/login.fxml"));
-		loader.setResources(bundle);
+		loader.setResources(getBundle());
 		createStage(loader);
 	}
 
@@ -83,7 +82,7 @@ public class ViewFactory {
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.png"))));
 			stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/dev/school/app/biblioapp/images/biblioapp.icns"))));
 			stage.setResizable(true);
-			stage.setTitle(bundle.getString("app.title"));
+			stage.setTitle(getBundle().getString("app.title"));
 			stage.show();
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -92,5 +91,9 @@ public class ViewFactory {
 
 	public void closeStage(Stage stage) {
 		stage.close();
+	}
+
+	private ResourceBundle getBundle() {
+		return Main.getBundle();
 	}
 }
