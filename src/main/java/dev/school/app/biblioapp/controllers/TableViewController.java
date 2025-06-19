@@ -3,18 +3,25 @@ package dev.school.app.biblioapp.controllers;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dev.school.app.biblioapp.Main;
+import dev.school.app.biblioapp.models.AlertManager;
 import dev.school.app.biblioapp.models.Book;
 import dev.school.app.biblioapp.models.Model;
+import dev.school.app.biblioapp.models.User;
 import dev.school.app.biblioapp.views.AboutWindow;
 import dev.school.app.biblioapp.views.BookPage;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -103,14 +110,21 @@ public class TableViewController implements Initializable {
 	private TableColumn<Book, Boolean> borrowedColumn;
 
 	@FXML
+	private TableColumn<Book, Void> editColumn;
+
+	@FXML
 	private TableColumn<Book, Void> deleteColumn;
 
 	/**
 	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 *
+	 * @param location  l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
+	 * @param resources le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		books = Model.getInstance().getBooks();
+		User currentUser = Model.getInstance().getCurrentUser();
 
 		openMenuItem.setOnAction(this::openFile);
 		exportMenuItem.setOnAction(this::exportToPDF);
@@ -127,8 +141,27 @@ public class TableViewController implements Initializable {
 		columnColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
 		rowColumn.setCellValueFactory(new PropertyValueFactory<>("row"));
 		imageColumn.setCellValueFactory(new PropertyValueFactory<>("pathImage"));
-		borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
 
+		borrowedColumn.setCellValueFactory(cellData ->
+				new SimpleBooleanProperty(!cellData.getValue().isBorrowed()));
+
+		borrowedColumn.setCellFactory(column -> new TableCell<>() {
+			@Override
+			protected void updateItem(Boolean isAvailable, boolean empty) {
+				super.updateItem(isAvailable, empty);
+				if (empty || isAvailable == null) {
+					setText(null);
+				} else {
+					setText(isAvailable ? bundle.getString("book.status.available") : bundle.getString("book.status.borrowed"));
+				}
+			}
+		});
+
+
+		if (currentUser == null || !currentUser.isAdmin()) {
+			editColumn.setVisible(false);
+			deleteColumn.setVisible(false);
+		}
 		imageColumn.setCellFactory(column -> new TableCell<>() {
 			private final ImageView imageView = new ImageView();
 
@@ -151,6 +184,34 @@ public class TableViewController implements Initializable {
 			}
 		});
 
+		editColumn.setCellFactory(column -> new TableCell<>() {
+			private final Button editButton = new Button();
+
+			{
+				FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.PENCIL);
+				editIcon.setGlyphSize(16);
+				editIcon.getStyleClass().add("edit-icon");
+
+				editButton.setGraphic(editIcon);
+				editButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+				editButton.setOnAction(e -> {
+					Book bookToEdit = getTableView().getItems().get(getIndex());
+					onEditBook(bookToEdit);
+				});
+			}
+
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(editButton);
+				}
+			}
+		});
+
 		deleteColumn.setCellFactory(column -> new TableCell<>() {
 			private final Button deleteButton = new Button();
 
@@ -165,22 +226,17 @@ public class TableViewController implements Initializable {
 				deleteButton.setOnAction(e -> {
 					Book book = getTableView().getItems().get(getIndex());
 
-					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-					confirm.setTitle(bundle.getString("book.delete.title"));
-					confirm.setHeaderText(bundle.getString("book.delete.header"));
-					confirm.setContentText(MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()));
-
-					ButtonType yes = new ButtonType(bundle.getString("book.delete.yes"), ButtonBar.ButtonData.YES);
-					ButtonType no = new ButtonType(bundle.getString("book.delete.no"), ButtonBar.ButtonData.NO);
-
-					confirm.getButtonTypes().setAll(yes, no);
-
-					confirm.showAndWait().ifPresent(response -> {
-						if (response == yes) {
-							bookTable.getItems().remove(book);
-							books.remove(book);
-						}
-					});
+					AlertManager.showAlert(Alert.AlertType.CONFIRMATION,
+							bundle.getString("global.delete.title"), bundle.getString("global.delete.header"),
+							MessageFormat.format(bundle.getString("book.delete.message"), book.getTitle()),
+							response -> {
+								if (response == ButtonType.OK) {
+									bookTable.getItems().remove(book);
+									books.remove(book);
+								}
+							},
+							ButtonType.OK, ButtonType.CANCEL
+					);
 				});
 			}
 
@@ -194,12 +250,14 @@ public class TableViewController implements Initializable {
 				}
 			}
 		});
+
+		bookTable.setItems(Model.getInstance().getBooks());
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut fermer l'application. (via le bouton "Quitter")
+	 * Gère la fermeture de l'application.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void closeApp(ActionEvent event) {
@@ -212,9 +270,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut ouvrir un fichier XML contenant des livres. (via le bouton "Ouvrir")
+	 * Gère l'ouverture d'un fichier XML contenant des livres.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void openFile(ActionEvent event) {
@@ -235,8 +293,6 @@ public class TableViewController implements Initializable {
 			books.clear(); // On clear books pour éviter de la duplication
 			try {
 				books.addAll(parseXML(selectedFile)); // On load les livres depuis le fichier sélectionné
-				bookTable.getItems().clear(); // On clear books depuis la bookTable pour aussi éviter une dupplication
-				bookTable.getItems().addAll(books); // On update la bookTable avec les nouveaux livres
 				LOGGER.info("Loaded " + books.size() + " books");
 				books.forEach(book -> LOGGER.info("Book loaded: " + book));
 			} catch (Exception e) {
@@ -248,9 +304,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut sauvegarder la bibliothèque. (via le bouton "Sauvegarder")
+	 * Gère la sauvegarde de la bibliothèque.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void saveFile(ActionEvent event) {
@@ -262,9 +318,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut sauvegarder la bibliothèqye dans un nouveau fichier XML. (via le bouton "Sauvegarder sous...")
+	 * Gère la sauvegarde de la bibliothèqye dans un nouveau fichier XML.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void saveAsFile(ActionEvent event) {
@@ -288,19 +344,16 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction s'exécutant lorsque l'utilisateur veut exporter la bibliothèque en un fichier PDF. (via le bouton "Exporter")
+	 * Gère l'exportation de la bibliothèque en un fichier PDF.
 	 *
-	 * @param event Évènement / Action utilisateur.
+	 * @param event évènement / action utilisateur.
 	 */
 	@FXML
 	void exportToPDF(ActionEvent event) {
 		if (books.isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle(bundle.getString("pdfExport.error.title"));
-			alert.setHeaderText(bundle.getString("pdfExport.error.header"));
-			alert.setContentText(bundle.getString("pdfExport.error.message"));
+			AlertManager.showAlert(Alert.AlertType.ERROR, bundle.getString("pdfExport.error.title"),
+					bundle.getString("pdfExport.error.header"), bundle.getString("pdfExport.error.message"));
 			LOGGER.info("Empty book list, cannot export to PDF!");
-			alert.showAndWait();
 			return;
 		}
 
@@ -547,11 +600,42 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction permettant de parser un fichier XML en une liste de @Book.
+	 * Gère la modification d'un {@Book} en ouvrant une popup.
 	 *
-	 * @param file Fichier XML à parser
-	 * @return Une liste de @Book
-	 * @throws Exception Exception retournée si le fichier XML ne contient pas de livres valides.
+	 * @param selectedBook l'objet {@Book} à modifier.
+	 */
+	private void onEditBook(Book selectedBook) {
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/dev/school/app/biblioapp/fxml/bookdialog.fxml"),
+					bundle
+			);
+			AnchorPane pane = loader.load();
+
+			BookDialogController controller = loader.getController();
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle(bundle.getString("book.dialog.title.edit"));
+			dialogStage.initModality(Modality.APPLICATION_MODAL);
+			dialogStage.setScene(new Scene(pane));
+			controller.setDialogStage(dialogStage);
+			controller.setBook(selectedBook, true);
+
+			dialogStage.showAndWait();
+
+			if (controller.isSaved()) {
+				bookTable.refresh();
+			}
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to load BookDialog.fxml: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Parse un fichier XML en une liste d'objets {@Book}.
+	 *
+	 * @param file fichier XML à parser.
+	 * @return une liste d'objets {@Book}.
+	 * @throws Exception si le fichier XML ne contient pas de livres valides.
 	 */
 	private List<Book> parseXML(File file) throws Exception {
 		List<Book> books = new ArrayList<>();
@@ -589,9 +673,9 @@ public class TableViewController implements Initializable {
 	}
 
 	/**
-	 * Fonction permettant de sauvegarder les livres chargés dans la bibliothèque dans un fichier XML.
+	 * Sauvegarde les livres chargés dans la bibliothèque dans un fichier XML.
 	 *
-	 * @param file Le fichier XML de sauvegarde.
+	 * @param file le fichier XML de sauvegarde.
 	 */
 	private void save(File file) {
 		try {

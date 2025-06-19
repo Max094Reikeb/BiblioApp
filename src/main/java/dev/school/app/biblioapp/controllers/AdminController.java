@@ -27,6 +27,12 @@ public class AdminController implements Initializable {
 	@FXML
 	private AnchorPane center_container;
 
+	/**
+	 * Fonction principale se lançant lors de l'initialisation du controller.
+	 *
+	 * @param url            l'URL de l'objet root object, ou null si aucun emplacement n'est spécifié.
+	 * @param resourceBundle le ResourceBundle permettant de traduire l'objet root, ou null si aucun bundle n'est spécifié.
+	 */
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
 		try {
@@ -44,7 +50,7 @@ public class AdminController implements Initializable {
 
 		Model.getInstance().getViewFactory().getAdminSelectedMenuItem().addListener((observableValue, oldVal, newVal) -> {
 			AnchorPane view = switch (newVal) {
-				case CREATE_BOOK -> Model.getInstance().getViewFactory().getCreateBookView();
+				case MANAGE_USERS -> Model.getInstance().getViewFactory().getUsersTableWindow();
 				default -> Model.getInstance().getViewFactory().getTableView();
 			};
 			center_container.getChildren().setAll(view);

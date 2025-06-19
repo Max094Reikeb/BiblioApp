@@ -20,7 +20,7 @@ public class ViewFactory {
 
 	private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 	private AnchorPane tableView;
-	private AnchorPane createBookView;
+	private AnchorPane usersTableView;
 
 	public ViewFactory() {
 		this.adminSelectedMenuItem = new SimpleObjectProperty<>();
@@ -43,15 +43,23 @@ public class ViewFactory {
 		return adminSelectedMenuItem;
 	}
 
-	public AnchorPane getCreateBookView() {
-		if (createBookView == null) {
+	public AnchorPane getUsersTableWindow() {
+		if (usersTableView == null) {
 			try {
-				createBookView = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/createbook.fxml")).load();
+				FXMLLoader usersTableLoader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/userview.fxml"));
+				usersTableLoader.setResources(bundle);
+				usersTableView = usersTableLoader.load();
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
-		return createBookView;
+		return usersTableView;
+	}
+
+	public void showUserWindow() {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/school/app/biblioapp/fxml/tableview.fxml"));
+		loader.setResources(bundle);
+		createStage(loader);
 	}
 
 	public void showAdminWindow() {
